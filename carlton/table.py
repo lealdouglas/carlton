@@ -64,7 +64,7 @@ def save(
         )
 
         carlton_log(
-            f"cadastrando {config_ingest['table_name']} no schema: {config_ingest['schema_name']}"
+            f"cadastrando tabela {config_ingest['table_name']} no schema {config_ingest['schema_name']}"
         )
         carlton_log(
             f'utilizando liquid_cluster. Gerenciando pela coluna carlton_current_date'
@@ -92,8 +92,8 @@ def save(
 
         else:
             carlton_log(f'Identificando execucao como stream')
-            validate_args(['processingTime'], config_ingest)
-            type_trigger['processingTime'] = config_ingest['processingTime']
+            validate_args(['trigger_processing_time'], config_ingest)
+            type_trigger['processingTime'] = config_ingest['trigger_processing_time']
 
         carlton_log(f'iniciando gravacao dos registros')
 
