@@ -6,7 +6,10 @@ from carlton.helper import carlton_log, validate_args
 
 
 def read(
-    config_ingest: dict, autoloader_config: dict, custom_config_spark={}
+    spark: SparkSession,
+    config_ingest: dict,
+    autoloader_config: dict,
+    custom_config_spark={},
 ) -> DataFrame:
 
     try:
@@ -15,9 +18,9 @@ def read(
             config_ingest, custom_config_spark
         )
 
-        carlton_log('autoloader_config', msg_dict=autoloader_config)
-
-        spark = SparkSession.builder.getOrCreate()
+        carlton_log(
+            'configuracoes usadas na leitura: ', msg_dict=autoloader_config
+        )
 
         return (
             spark.readStream.format('cloudFiles')
@@ -35,6 +38,7 @@ def read(
 
 
 def save(
+    spark: SparkSession,
     df: DataFrame,
     config_ingest: dict,
     custom_config_spark={},
@@ -46,11 +50,9 @@ def save(
             config_ingest,
         )
 
-        spark = SparkSession.builder.getOrCreate()
-
         save_config = config_ingest_tgt(config_ingest, custom_config_spark)
 
-        carlton_log('save_config', msg_dict=save_config)
+        carlton_log('configuracoes usadas na escrita: ', msg_dict=save_config)
 
         lst_builtin = ['_rescued', 'carlton_current_date', 'carlton_metadata']
         columns_file = ', '.join(
@@ -59,25 +61,39 @@ def save(
             if col not in lst_builtin
         )
 
-        spark.sql(
-            f"""
+        carlton_log(
+            f"cadastrando {config_ingest['table_name']} no schema: {config_ingest['schema_name']}"
+        )
+        carlton_log(
+            f'utilizando liquid_cluster. Gerenciando pela coluna carlton_current_date'
+        )
+
+        query_create_table = f"""
             CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} (
             {columns_file}
             ,_rescued STRING
             ,carlton_current_date DATE
             ,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>
             )
-            USING DELTA CLUSTER BY (carlton_current_date) LOCATION '{config_ingest['table_path']}'
-        """
+            USING DELTA CLUSTER BY (carlton_current_date) LOCATION '{config_ingest['table_path']}'"""
+
+        carlton_log(f'cadastrando tabela: {query_create_table}')
+        spark.sql(query_create_table)
+        carlton_log(
+            f"tabela {config_ingest['schema_name']}.{config_ingest['table_name']} criada com sucesso"
         )
 
         type_trigger = {}
         if config_ingest['type_run'] == 'batch':
+            carlton_log(f'Identificando execucao como batch')
             type_trigger['availableNow'] = True
 
         else:
+            carlton_log(f'Identificando execucao como stream')
             validate_args(['processingTime'], config_ingest)
             type_trigger['processingTime'] = config_ingest['processingTime']
+
+        carlton_log(f'iniciando gravacao dos registros')
 
         df.writeStream.options(**save_config).outputMode('append').trigger(
             **type_trigger

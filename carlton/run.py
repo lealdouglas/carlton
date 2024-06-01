@@ -17,7 +17,8 @@ def run(config_ingest: dict, custom_config_spark={}) -> DataFrame:
         ).getOrCreate()
 
         save(
-            read(config_ingest, custom_config_spark),
+            spark,
+            read(spark, config_ingest, custom_config_spark),
             config_ingest,
             custom_config_spark,
         )

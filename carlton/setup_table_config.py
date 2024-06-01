@@ -3,10 +3,9 @@ from pyspark.sql import SparkSession
 from carlton.helper import carlton_log
 
 
-def setup_table(schema_setup_name='bronze'):
+def setup_table(spark: SparkSession, schema_setup_name='bronze'):
 
     try:
-        spark = SparkSession.builder.getOrCreate()
 
         spark.sql(
             f"""
@@ -28,6 +27,7 @@ def setup_table(schema_setup_name='bronze'):
 
 
 def insert_value_table(
+    spark: SparkSession,
     table_name: str,
     domain_name: str,
     requester_name: str,
@@ -36,8 +36,6 @@ def insert_value_table(
 ):
 
     try:
-
-        spark = SparkSession.builder.getOrCreate()
 
         result_query = spark.sql(
             f"SELECT count(1) FROM {schema_setup_name}.table_config_ingest WHERE SCHEMA='{schema_name}' AND TABLE='{table_name}' AND DOMAIN='{domain_name}'"
@@ -55,11 +53,12 @@ def insert_value_table(
         carlton_log(str(e))
 
 
-def get_tables_domain(domain_name: str, schema_setup_name='bronze'):
+def get_tables_domain(
+    spark: SparkSession, domain_name: str, schema_setup_name='bronze'
+):
 
     try:
 
-        spark = SparkSession.builder.getOrCreate()
         return spark.sql(
             f"SELECT * FROM {schema_setup_name}.table_config_ingest WHERE DOMAIN='{domain_name}'"
         )
@@ -68,10 +67,11 @@ def get_tables_domain(domain_name: str, schema_setup_name='bronze'):
         carlton_log(str(e))
 
 
-def get_tables_requester(requester: str, schema_setup_name='bronze'):
+def get_tables_requester(
+    spark: SparkSession, requester: str, schema_setup_name='bronze'
+):
     try:
 
-        spark = SparkSession.builder.getOrCreate()
         return spark.sql(
             f"SELECT * FROM {schema_setup_name}.table_config_ingest WHERE REQUESTER='{requester}'"
         )
