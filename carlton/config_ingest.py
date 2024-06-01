@@ -1,4 +1,4 @@
-from carlton.helper import validate_args
+from carlton.helper import carlton_log, validate_args
 
 
 def get_params_path(config_ingest: dict) -> dict:
@@ -16,7 +16,7 @@ def get_params_path(config_ingest: dict) -> dict:
         )
 
         config_ingest[
-            'file_path'
+            'carlton_file_path'
         ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['table_name']}/"
         config_ingest[
             'schemaLocation'
@@ -39,7 +39,7 @@ def get_params_path(config_ingest: dict) -> dict:
         )
 
         config_ingest[
-            'file_path'
+            'carlton_file_path'
         ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['table_name']}/"
         config_ingest[
             'schemaLocation'
@@ -65,7 +65,7 @@ def config_ingest_src(config_ingest: dict, custom_config_spark={}) -> dict:
         Um dicionario de configuracoes.
 
     Examples:
-        >>> config_ingest_src({'file_resource':'dbfs','file_dbfs':'/FileStore/dt_master','table_name':'account_json','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','file_path':'/input','table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/','table_merge_schema':'true'})
+        >>> config_ingest_src({'file_resource':'dbfs','file_dbfs':'/FileStore/dt_master','table_name':'account_json','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/','table_merge_schema':'true'})
         {'pathGlobfilter': '*.csv', 'cloudFiles.format': 'csv', 'cloudFiles.schemaLocation': '/FileStore/dt_master/input/account_json/_schemaLocation', 'cloudFiles.schemaEvolutionMode': 'rescue', 'cloudFiles.inferColumnTypes': 'false', 'cloudFiles.allowOverwrites': 'true', 'rescuedDataColumn': 'carlton_rescued', 'header': 'true', 'delimiter': ';'}
     """
 

@@ -67,4 +67,4 @@ def drop_table_path(schema_name: str, table_name: str):
         carlton_log(f'{table} removida com sucesso')
 
     except Exception as e:
-        carlton_log(e)
+        carlton_log(str(e))

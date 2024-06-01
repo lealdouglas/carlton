@@ -1,13 +1,43 @@
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, current_date
 
-from carlton.config_ingest import config_ingest_src
+from carlton.config_ingest import config_ingest_src, config_ingest_tgt
 from carlton.helper import carlton_log, validate_args
+
+
+def read(
+    config_ingest: dict, autoloader_config: dict, custom_config_spark={}
+) -> DataFrame:
+
+    try:
+
+        autoloader_config = config_ingest_src(
+            config_ingest, custom_config_spark
+        )
+
+        carlton_log('autoloader_config', msg_dict=autoloader_config)
+
+        spark = SparkSession.builder.getOrCreate()
+
+        return (
+            spark.readStream.format('cloudFiles')
+            .options(**autoloader_config)
+            .load(config_ingest['carlton_file_path'])
+            .select(
+                '*',
+                current_date().alias('carlton_current_date'),
+                col('_metadata').alias('carlton_metadata'),
+            )
+        )
+
+    except Exception as e:
+        carlton_log(str(e))
 
 
 def save(
     df: DataFrame,
     config_ingest: dict,
+    custom_config_spark={},
 ):
 
     try:
@@ -17,6 +47,10 @@ def save(
         )
 
         spark = SparkSession.builder.getOrCreate()
+
+        save_config = config_ingest_tgt(config_ingest, custom_config_spark)
+
+        carlton_log('save_config', msg_dict=save_config)
 
         lst_builtin = ['_rescued', 'carlton_current_date', 'carlton_metadata']
         columns_file = ', '.join(
@@ -49,11 +83,11 @@ def save(
             **type_trigger
         ).table(
             f"{config_ingest['schema_name']}.{config_ingest['table_name']}"
-        )
+        ).awaitTermination()
 
         carlton_log(
             f"{config_ingest['schema_name']}.{config_ingest['table_name']} processada com sucesso"
         )
 
     except Exception as e:
-        carlton_log(e)
+        carlton_log(str(e))
