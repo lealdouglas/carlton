@@ -6,7 +6,6 @@ from carlton.helper import carlton_log, validate_args
 
 
 def read(
-    spark: SparkSession,
     config_ingest: dict,
     autoloader_config: dict,
     custom_config_spark={},
@@ -21,6 +20,8 @@ def read(
         carlton_log(
             'configuracoes usadas na leitura: ', msg_dict=autoloader_config
         )
+
+        spark = SparkSession.builder.getOrCreate()
 
         return (
             spark.readStream.format('cloudFiles')
@@ -38,7 +39,6 @@ def read(
 
 
 def save(
-    spark: SparkSession,
     df: DataFrame,
     config_ingest: dict,
     custom_config_spark={},
@@ -53,6 +53,8 @@ def save(
         save_config = config_ingest_tgt(config_ingest, custom_config_spark)
 
         carlton_log('configuracoes usadas na escrita: ', msg_dict=save_config)
+
+        spark = SparkSession.builder.getOrCreate()
 
         lst_builtin = ['_rescued', 'carlton_current_date', 'carlton_metadata']
         columns_file = ', '.join(
