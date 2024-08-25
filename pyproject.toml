@@ -1,9 +1,19 @@
 [tool.poetry]
 name = "carlton"
 version = "0.1.0"
-description = ""
+description = "Carlton, uma poderosa biblioteca de ingestão de dados na cloud"
 authors = ["Leal <douglas.sleal@outlook.com>"]
 readme = "README.md"
+packages = [{include = "carlton"}]
+classifiers = [
+    "Topic :: Education",
+    "Environment :: Console",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.9",
+]
+
+
 
 [tool.poetry.dependencies]
 python = "^3.9"
