@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
-from utils.logger import log_error, log_info
+
+from carlton.utils.logger import log_error, log_info
 
 
 def setup_table(schema_setup_name='bronze'):
