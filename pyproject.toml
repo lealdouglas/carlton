@@ -15,7 +15,7 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-"Documentação" = "https://carlton.readthedocs.io/en/latest/"
+"Documentação" = "https://carlton.readthedocs.io/pt-br/latest/"
 "Código" = "https://github.com/lealdouglas/carlton"
 "Bug Tracker" = "https://github.com/lealdouglas/carlton/issues"
 
