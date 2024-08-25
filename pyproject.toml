@@ -2,6 +2,7 @@
 name = "carlton"
 version = "0.1.0"
 description = "Carlton, uma poderosa biblioteca de ingestão de dados na cloud"
+license = "Apache License"
 authors = ["Leal <douglas.sleal@outlook.com>"]
 readme = "README.md"
 packages = [{include = "carlton"}]
@@ -13,7 +14,10 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
 ]
 
-
+[tool.poetry.urls]
+"Documentação" = "https://carlton.readthedocs.io/en/latest/"
+"Código" = "https://github.com/lealdouglas/carlton"
+"Bug Tracker" = "https://github.com/lealdouglas/carlton/issues"
 
 [tool.poetry.dependencies]
 python = "^3.9"

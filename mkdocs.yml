@@ -18,10 +18,8 @@ extra_css:
 
 watch:
   - carlton
-
-plugins:
-  - macros
-  - mkdocstrings:
-      handlers:
-        python:
-          paths: [carlton]
+# plugins:
+#   - mkdocstrings:
+#       handlers:
+#         python:
+#           paths: [carlton]
