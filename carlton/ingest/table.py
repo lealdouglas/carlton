@@ -1,8 +1,9 @@
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, current_date
 
-from carlton.config_ingest import config_ingest_src, config_ingest_tgt
-from carlton.helper import carlton_log, validate_args
+from ingest.config_ingest import config_ingest_src, config_ingest_tgt
+from utils.helper import validate_args
+from utils.logger import log_error, log_info
 
 
 def read(
@@ -17,7 +18,7 @@ def read(
             config_ingest, custom_config_spark
         )
 
-        carlton_log(
+        log_info(
             'configuracoes usadas na leitura: ', msg_dict=autoloader_config
         )
 
@@ -35,7 +36,7 @@ def read(
         )
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
 
 
 def save(
@@ -52,7 +53,7 @@ def save(
 
         save_config = config_ingest_tgt(config_ingest, custom_config_spark)
 
-        carlton_log('configuracoes usadas na escrita: ', msg_dict=save_config)
+        log_info('configuracoes usadas na escrita: ', msg_dict=save_config)
 
         spark = SparkSession.builder.getOrCreate()
 
@@ -63,10 +64,10 @@ def save(
             if col not in lst_builtin
         )
 
-        carlton_log(
+        log_info(
             f"cadastrando tabela {config_ingest['table_name']} no schema {config_ingest['schema_name']}"
         )
-        carlton_log(
+        log_info(
             f'utilizando liquid_cluster. Gerenciando pela coluna carlton_current_date'
         )
 
@@ -79,23 +80,25 @@ def save(
             )
             USING DELTA CLUSTER BY (carlton_current_date) LOCATION '{config_ingest['table_path']}'"""
 
-        carlton_log(f'cadastrando tabela: {query_create_table}')
+        log_info(f'cadastrando tabela: {query_create_table}')
         spark.sql(query_create_table)
-        carlton_log(
+        log_info(
             f"tabela {config_ingest['schema_name']}.{config_ingest['table_name']} criada com sucesso"
         )
 
         type_trigger = {}
         if config_ingest['type_run'] == 'batch':
-            carlton_log(f'Identificando execucao como batch')
+            log_info(f'Identificando execucao como batch')
             type_trigger['availableNow'] = True
 
         else:
-            carlton_log(f'Identificando execucao como stream')
+            log_info(f'Identificando execucao como stream')
             validate_args(['trigger_processing_time'], config_ingest)
-            type_trigger['processingTime'] = config_ingest['trigger_processing_time']
+            type_trigger['processingTime'] = config_ingest[
+                'trigger_processing_time'
+            ]
 
-        carlton_log(f'iniciando gravacao dos registros')
+        log_info(f'iniciando gravacao dos registros')
 
         df.writeStream.options(**save_config).outputMode('append').trigger(
             **type_trigger
@@ -103,9 +106,9 @@ def save(
             f"{config_ingest['schema_name']}.{config_ingest['table_name']}"
         ).awaitTermination()
 
-        carlton_log(
+        log_info(
             f"{config_ingest['schema_name']}.{config_ingest['table_name']} processada com sucesso"
         )
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))

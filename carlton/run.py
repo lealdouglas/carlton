@@ -1,29 +1,36 @@
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, current_date
 
-from carlton.config_ingest import config_ingest_src, config_ingest_tgt
-from carlton.helper import carlton_log, validate_args
-from carlton.table import read, save
+from ingest.config_ingest import config_ingest_src, config_ingest_tgt
+from utils.helper import validate_args
+from ingest.table import read, save
+from utils.logger import log_error, log_info
 
-
-def run(config_ingest: dict, custom_config_spark={}) -> DataFrame:
+# config_ingest: dict, custom_config_spark={}
+def run() -> DataFrame:
 
     try:
 
-        carlton_log(f'ingestao iniciada')
+        log_info(f'ingestao iniciada')
 
         spark = SparkSession.builder.appName(
             'Carlton Ingest APP'
         ).getOrCreate()
 
-        save(
-            spark,
-            read(spark, config_ingest, custom_config_spark),
-            config_ingest,
-            custom_config_spark,
-        )
+        print('Hello World!')
 
-        carlton_log(f'ingestao finalizada')
+        # save(
+        #     spark,
+        #     read(spark, config_ingest, custom_config_spark),
+        #     config_ingest,
+        #     custom_config_spark,
+        # )
+
+        log_info(f'ingestao finalizada')
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
+
+
+if __name__ == '__main__':
+    run()

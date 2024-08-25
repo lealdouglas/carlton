@@ -28,14 +28,6 @@ def validate_args(args_nedeed: list, args_user: dict):
             )
 
 
-def carlton_log(msg=str, msg_dict={}, msg_lst=[]):
-
-    utc_dt = datetime.now(timezone.utc)
-    print(
-        f"CARLTON_LOG {utc_dt.astimezone(SP).isoformat()}: {msg.upper()} {'' if len(msg_dict)==0 else msg_dict} {'' if len(msg_dict)==0 else msg_lst}"
-    )
-
-
 def drop_table_path(schema_name: str, table_name: str):
 
     try:
@@ -59,12 +51,12 @@ def drop_table_path(schema_name: str, table_name: str):
             .first()[0]
         )
 
-        carlton_log(f'location da tabela que sera apagada: {location}')
+        log_info(f'location da tabela que sera apagada: {location}')
 
         dbutils.fs.rm(location, True)
         spark.sql(f'DROP TABLE IF EXISTS {table}')
 
-        carlton_log(f'{table} removida com sucesso')
+        log_info(f'{table} removida com sucesso')
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))

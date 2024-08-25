@@ -1,6 +1,5 @@
 from pyspark.sql import SparkSession
-
-from carlton.helper import carlton_log
+from utils.logger import log_error, log_info
 
 
 def setup_table(schema_setup_name='bronze'):
@@ -21,11 +20,9 @@ def setup_table(schema_setup_name='bronze'):
         """
         )
 
-        carlton_log(
-            f'{schema_setup_name}.table_config_ingest criado com sucesso'
-        )
+        log_info(f'{schema_setup_name}.table_config_ingest criado com sucesso')
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
 
 
 def insert_value_table(
@@ -51,9 +48,9 @@ def insert_value_table(
             f"INSERT INTO TABLE {schema_setup_name}.table_config_ingest VALUES ('{schema_name}','{table_name}','{domain_name}','{requester_name}')"
         )
 
-        carlton_log(f'{schema_name}.{table_name} cadastrada com sucesso')
+        log_info(f'{schema_name}.{table_name} cadastrada com sucesso')
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
 
 
 def get_tables_domain(domain_name: str, schema_setup_name='bronze'):
@@ -67,7 +64,7 @@ def get_tables_domain(domain_name: str, schema_setup_name='bronze'):
         )
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
 
 
 def get_tables_requester(requester: str, schema_setup_name='bronze'):
@@ -80,4 +77,4 @@ def get_tables_requester(requester: str, schema_setup_name='bronze'):
         )
 
     except Exception as e:
-        carlton_log(str(e))
+        log_error(str(e))
