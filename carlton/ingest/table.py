@@ -5,6 +5,7 @@ from ingest.config_ingest import config_ingest_src, config_ingest_tgt
 from utils.helper import validate_args
 from utils.logger import log_error, log_info
 
+
 def read(
     config_ingest: dict,
     autoloader_config: dict,
@@ -23,10 +24,14 @@ def read(
     """
     try:
         # Configura o autoloader com as configurações de ingestão
-        autoloader_config = config_ingest_src(config_ingest, custom_config_spark)
+        autoloader_config = config_ingest_src(
+            config_ingest, custom_config_spark
+        )
 
         # Loga as configurações usadas na leitura
-        log_info('configuracoes usadas na leitura: ', msg_dict=autoloader_config)
+        log_info(
+            'configuracoes usadas na leitura: ', msg_dict=autoloader_config
+        )
 
         # Cria ou obtém uma sessão Spark
         spark = SparkSession.builder.getOrCreate()
@@ -46,6 +51,7 @@ def read(
     except Exception as e:
         # Loga qualquer erro que ocorra durante a leitura
         log_error(str(e))
+
 
 def save(
     df: DataFrame,
@@ -116,7 +122,9 @@ def save(
         else:
             log_info(f'Identificando execucao como stream')
             validate_args(['trigger_processing_time'], config_ingest)
-            type_trigger['processingTime'] = config_ingest['trigger_processing_time']
+            type_trigger['processingTime'] = config_ingest[
+                'trigger_processing_time'
+            ]
 
         log_info(f'iniciando gravacao dos registros')
 
