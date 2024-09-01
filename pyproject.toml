@@ -24,7 +24,6 @@ python = "^3.9"
 
 [tool.poetry.scripts]
 carlton = "carlton.run:run"
-quality = "carlton.run_quality:run"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
