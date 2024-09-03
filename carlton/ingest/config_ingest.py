@@ -4,7 +4,7 @@ from carlton.utils.logger import log_error, log_info
 
 def get_params_path(config_ingest: dict) -> dict:
 
-    if config_ingest['file_resource'] == 'gen2':
+    if config_ingest['file_resource'] == 'adls':
 
         validate_args(
             [
@@ -12,13 +12,14 @@ def get_params_path(config_ingest: dict) -> dict:
                 'storage_name_src',
                 'container_tgt',
                 'storage_name_tgt',
+                'path_src',
             ],
             config_ingest,
         )
 
         config_ingest[
             'carlton_file_path'
-        ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['table_name']}/"
+        ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['path_src']}/"
         config_ingest[
             'schemaLocation'
         ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['table_name']}/_schemaLocation"
@@ -41,7 +42,7 @@ def get_params_path(config_ingest: dict) -> dict:
 
         config_ingest[
             'carlton_file_path'
-        ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['table_name']}/"
+        ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['path_src']}/"
         config_ingest[
             'schemaLocation'
         ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['table_name']}/_schemaLocation"
@@ -66,7 +67,7 @@ def config_ingest_src(config_ingest: dict, custom_config_spark={}) -> dict:
         Um dicionario de configuracoes.
 
     Examples:
-        >>> config_ingest_src({'file_resource':'dbfs','file_dbfs':'/FileStore/dt_master','table_name':'account_json','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/','table_merge_schema':'true'})
+        >>> config_ingest_src({'path_src':'/pathfile/', 'file_resource':'dbfs','file_dbfs':'/FileStore/dt_master','table_name':'account_json','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/','table_merge_schema':'true'})
         {'pathGlobfilter': '*.csv', 'cloudFiles.format': 'csv', 'cloudFiles.schemaLocation': '/FileStore/dt_master/input/account_json/_schemaLocation', 'cloudFiles.schemaEvolutionMode': 'rescue', 'cloudFiles.inferColumnTypes': 'false', 'cloudFiles.allowOverwrites': 'true', 'rescuedDataColumn': 'carlton_rescued', 'header': 'true', 'delimiter': ';'}
     """
 
