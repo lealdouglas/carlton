@@ -1,153 +1,141 @@
+# config_validator.py
 from carlton.utils.helper import validate_args
+
+class ConfigValidator:
+    @staticmethod
+    def validate_args(required_args, config):
+        """
+        Validate that all required arguments are present in the config.
+        
+        :param required_args: List of required argument keys.
+        :param config: Configuration dictionary to validate.
+        """
+        validate_args(required_args, config)
+
+# path_builder.py
+class PathBuilder:
+    @staticmethod
+    def build_adls_paths(config):
+        """
+        Build paths for Azure Data Lake Storage (ADLS).
+        
+        :param config: Configuration dictionary containing necessary keys.
+        :return: Updated configuration dictionary with ADLS paths.
+        """
+        config['carlton_file_path'] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/{config['path_src']}/"
+        config['schemaLocation'] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/{config['table_name']}/_schemaLocation"
+        config['table_path'] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.windows.net/{config['table_name']}/"
+        config['checkpointLocation'] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.windows.net/{config['table_name']}/_checkpointLocation"
+        return config
+
+    @staticmethod
+    def build_dbfs_paths(config):
+        """
+        Build paths for Databricks File System (DBFS).
+        
+        :param config: Configuration dictionary containing necessary keys.
+        :return: Updated configuration dictionary with DBFS paths.
+        """
+        config['carlton_file_path'] = f"{config['file_dbfs']}/input/{config['path_src']}/"
+        config['schemaLocation'] = f"{config['file_dbfs']}/input/{config['table_name']}/_schemaLocation"
+        config['table_path'] = f"{config['file_dbfs']}/output/{config['table_name']}"
+        config['checkpointLocation'] = f"{config['file_dbfs']}/output/{config['table_name']}/_checkpointLocation"
+        return config
+
+# config_ingestor.py
 from carlton.utils.logger import log_error, log_info
+from config_validator import ConfigValidator
+from path_builder import PathBuilder
 
+class ConfigIngestor:
+    @staticmethod
+    def get_params_path(config):
+        """
+        Get the appropriate paths based on the file resource type.
+        
+        :param config: Configuration dictionary containing necessary keys.
+        :return: Updated configuration dictionary with paths.
+        """
+        if config['file_resource'] == 'adls':
+            ConfigValidator.validate_args(
+                ['container_src', 'storage_name_src', 'container_tgt', 'storage_name_tgt', 'path_src'],
+                config
+            )
+            config = PathBuilder.build_adls_paths(config)
+        elif config['file_resource'] == 'dbfs':
+            ConfigValidator.validate_args(
+                ['file_dbfs', 'table_name'],
+                config
+            )
+            config = PathBuilder.build_dbfs_paths(config)
+        return config
 
-def get_params_path(config_ingest: dict) -> dict:
-
-    if config_ingest['file_resource'] == 'adls':
-
-        validate_args(
-            [
-                'container_src',
-                'storage_name_src',
-                'container_tgt',
-                'storage_name_tgt',
-                'path_src',
-            ],
-            config_ingest,
+    @staticmethod
+    def config_ingest_src(config, custom_config_spark={}):
+        """
+        Configure the source ingestion settings.
+        
+        :param config: Configuration dictionary containing necessary keys.
+        :param custom_config_spark: Custom Spark configuration dictionary.
+        :return: Dictionary with autoloader configuration.
+        """
+        ConfigValidator.validate_args(
+            ['type_run', 'file_extension', 'file_resource'],
+            config
         )
+        config = ConfigIngestor.get_params_path(config)
 
-        config_ingest[
-            'carlton_file_path'
-        ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['path_src']}/"
-        config_ingest[
-            'schemaLocation'
-        ] = f"abfss://{config_ingest['container_src']}@{config_ingest['storage_name_src']}.dfs.windows.net/{config_ingest['table_name']}/_schemaLocation"
-        config_ingest[
-            'table_path'
-        ] = f"abfss://{config_ingest['container_tgt']}@{config_ingest['storage_name_tgt']}.dfs.windows.net/{config_ingest['table_name']}/"
-        config_ingest[
-            'checkpointLocation'
-        ] = f"abfss://{config_ingest['container_tgt']}@{config_ingest['storage_name_tgt']}.dfs.windows.net/{config_ingest['table_name']}/_checkpointLocation"
+        autoloader_config_csv = {}
+        if config['file_extension'] == 'csv':
+            ConfigValidator.validate_args(
+                ['file_header', 'file_delimiter'],
+                config
+            )
+            autoloader_config_csv = {
+                'header': config['file_header'],
+                'delimiter': config['file_delimiter'],
+            }
 
-    elif config_ingest['file_resource'] == 'dbfs':
+        autoloader_config_json = {}
+        if config['file_extension'] == 'json':
+            autoloader_config_json = {
+                'multiLine': True,
+            }
 
-        validate_args(
-            [
-                'file_dbfs',
-                'table_name',
-            ],
-            config_ingest,
-        )
-
-        config_ingest[
-            'carlton_file_path'
-        ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['path_src']}/"
-        config_ingest[
-            'schemaLocation'
-        ] = f"{config_ingest['file_dbfs']}/input/{config_ingest['table_name']}/_schemaLocation"
-        config_ingest[
-            'table_path'
-        ] = f"{config_ingest['file_dbfs']}/output/{config_ingest['table_name']}"
-        config_ingest[
-            'checkpointLocation'
-        ] = f"{config_ingest['file_dbfs']}/output/{config_ingest['table_name']}/_checkpointLocation"
-
-    return config_ingest
-
-
-def config_ingest_src(config_ingest: dict, custom_config_spark={}) -> dict:
-    """
-    Prepara as variaveis de configuracao para leitura do arquivo.
-
-    Args:
-        custom_config_spark: dicionario de configuracoes adicionais se necessario
-
-    Returns:
-        Um dicionario de configuracoes.
-
-    Examples:
-        >>> config_ingest_src({'path_src':'/pathfile/', 'file_resource':'dbfs','file_dbfs':'/FileStore/dt_master','table_name':'account_json','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/','table_merge_schema':'true'})
-        {'pathGlobfilter': '*.csv', 'cloudFiles.format': 'csv', 'cloudFiles.schemaLocation': '/FileStore/dt_master/input/account_json/_schemaLocation', 'cloudFiles.schemaEvolutionMode': 'rescue', 'cloudFiles.inferColumnTypes': 'false', 'cloudFiles.allowOverwrites': 'true', 'rescuedDataColumn': 'carlton_rescued', 'header': 'true', 'delimiter': ';'}
-    """
-
-    validate_args(
-        [
-            'type_run',
-            'file_extension',
-            'file_resource',
-        ],
-        config_ingest,
-    )
-
-    config_ingest = get_params_path(config_ingest)
-
-    autoloader_config_csv = {}
-    if config_ingest['file_extension'] == 'csv':
-
-        validate_args(
-            [
-                'file_header',
-                'file_delimiter',
-            ],
-            config_ingest,
-        )
-
-        autoloader_config_csv = {
-            'header': config_ingest['file_header'],
-            'delimiter': config_ingest['file_delimiter'],
+        autoloader_config = {
+            'pathGlobfilter': f"*.{config['file_extension']}",
+            'cloudFiles.format': config['file_extension'],
+            'cloudFiles.schemaLocation': config['schemaLocation'],
+            'cloudFiles.schemaEvolutionMode': 'rescue',
+            'cloudFiles.inferColumnTypes': 'false',
+            'cloudFiles.allowOverwrites': 'true',
+            'rescuedDataColumn': 'carlton_rescued',
+            **autoloader_config_csv,
+            **autoloader_config_json,
+            **custom_config_spark,
         }
 
-    autoloader_config_json = {}
-    if config_ingest['file_extension'] == 'json':
-        autoloader_config_json = {
-            'multiLine': True,
-            # "encoding": "utf8",
+        return autoloader_config
+
+    @staticmethod
+    def config_ingest_tgt(config, custom_config_spark={}):
+        """
+        Configure the target ingestion settings.
+        
+        :param config: Configuration dictionary containing necessary keys.
+        :param custom_config_spark: Custom Spark configuration dictionary.
+        :return: Dictionary with save configuration.
+        """
+        ConfigValidator.validate_args(
+            ['table_path', 'checkpointLocation'],
+            config
+        )
+
+        save_config = {
+            'checkpointLocation': config['checkpointLocation'],
+            'path': config['table_path'],
+            'mergeSchema': True,
+            **custom_config_spark,
         }
 
-    autoloader_config = {
-        'pathGlobfilter': f"*.{config_ingest['file_extension']}",
-        'cloudFiles.format': config_ingest['file_extension'],
-        'cloudFiles.schemaLocation': config_ingest['schemaLocation'],
-        'cloudFiles.schemaEvolutionMode': 'rescue',
-        'cloudFiles.inferColumnTypes': 'false',
-        'cloudFiles.allowOverwrites': 'true',
-        'rescuedDataColumn': 'carlton_rescued',
-        **autoloader_config_csv,
-        **autoloader_config_json,
-        **custom_config_spark,
-    }
-
-    return autoloader_config
-
-
-def config_ingest_tgt(config_ingest: dict, custom_config_spark={}) -> dict:
-    """
-    Prepara as variaveis de configuracao para leitura do arquivo.
-
-    Args:
-        custom_config_spark: dicionario de configuracoes adicionais se necessario
-
-    Returns:
-        Um dicionario de configuracoes.
-
-    Examples:
-        >>> config_ingest_tgt({'checkpointLocation':'/save/_checkpointLocation','table_path':'/save','table_merge_schema':'true','type_run':'batch','file_extension':'csv','file_header':'true','file_delimiter':';','schema_location':'/input/'})
-        {'checkpointLocation': '/save/_checkpointLocation', 'path': '/save', 'mergeSchema': True}
-    """
-
-    args_nedeed = [
-        'table_path',
-        'checkpointLocation',
-    ]
-
-    validate_args(args_nedeed, config_ingest)
-
-    save_config = {
-        'checkpointLocation': config_ingest['checkpointLocation'],
-        'path': config_ingest['table_path'],
-        'mergeSchema': True,
-        **custom_config_spark,
-    }
-
-    return save_config
+        return save_config
