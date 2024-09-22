@@ -1,7 +1,8 @@
 # table.py
+from pyspark.sql import DataFrame
+
 from carlton.ingest.data_reader import DataReader
 from carlton.ingest.data_saver import DataSaver
-from pyspark.sql import DataFrame
 
 
 def read(config_ingest: dict, custom_config_spark={}) -> DataFrame:

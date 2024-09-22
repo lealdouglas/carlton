@@ -1,7 +1,6 @@
 # config_ingestor.py
 from carlton.ingest.config_validator import ConfigValidator
 from carlton.ingest.path_builder import PathBuilder
-
 from carlton.utils.logger import log_error, log_info
 
 
