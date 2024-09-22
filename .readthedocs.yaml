@@ -18,7 +18,7 @@ build:
 
     post_install:
       - poetry install --only doc
-      - poetry remove mkdocs
+      - poetry lock remove mkdocs
       - pip uninstall mkdocs
       - pip install mkdocs
 
