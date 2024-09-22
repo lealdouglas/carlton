@@ -4,7 +4,7 @@ repo_name: lealdouglas/carlton
 edit_uri: tree/main/docs
 
 theme:
-  name: readthedocs
+  name: material
   language: pt-BR
   logo: assets/logo.png
   favicon: assets/logo.png
