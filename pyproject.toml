@@ -24,7 +24,7 @@ python = "^3.9"
 azure-eventhub = "^5.12.1"
 
 [tool.poetry.scripts]
-carlton = "carlton.run:run"
+carlton = "carlton.run:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"

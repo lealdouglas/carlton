@@ -17,7 +17,7 @@ class Validator:
                       If a required parameter is missing in the user's dictionary.
 
         Examples:
-            >>> Validator.validate_args(['table_checkpoint_location','table_path'], {'table_checkpoint_location':'/save/_checkpointLocation','table_path':'/save/'})
+            >>> Validator.validate_args(['table_checkpoint_location'], {'table_checkpoint_location':'/save/_checkpointLocation'})
         """
         for arg in args_needed:
             if arg not in args_user:

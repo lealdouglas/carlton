@@ -45,14 +45,13 @@ def main(args=sys.argv[1:]):
 
         # Processa os argumentos
         # Process the arguments
+
         root_properties = process_args(args)
 
         # Imprime as propriedades raiz
         # Print the root properties
         for p in root_properties:
-            print(p, root_properties[p])
-
-        print('Hello World!')
+            log_info(f'{p}: {root_properties[p]}')
 
         # Criação de SparkSession
         # Create SparkSession
@@ -60,11 +59,12 @@ def main(args=sys.argv[1:]):
 
         # Leitura de dados
         # Read data
+        
         df = read(spark, root_properties)
 
         # Salvamento de dados
         # Save data
-        save(df, root_properties)
+        # save(df, root_properties)
 
         log_info('Ingestão finalizada')
         # Data ingestion finished

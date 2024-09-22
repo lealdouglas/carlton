@@ -1,11 +1,12 @@
 # table.py
-from pyspark.sql import DataFrame
+from pyspark.sql import DataFrame, SparkSession
 
 from carlton.ingest.data_reader import DataReader
 from carlton.ingest.data_saver import DataSaver
+from carlton.utils.logger import log_info
 
 
-def read(config_ingest: dict, custom_config_spark={}) -> DataFrame:
+def read(spark:SparkSession, config_ingest: dict, custom_config_spark={}) -> DataFrame:
     """
     Função wrapper para ler dados usando DataReader.\n
     Wrapper function to read data using DataReader.
@@ -20,7 +21,8 @@ def read(config_ingest: dict, custom_config_spark={}) -> DataFrame:
         DataFrame: DataFrame contendo os dados lidos.
                    DataFrame containing the read data.
     """
-    return DataReader.read_data(config_ingest, custom_config_spark)
+    log_info('DataReader.read_data')
+    return DataReader.read_data(spark, config_ingest, custom_config_spark)
 
 
 def save(df: DataFrame, config_ingest: dict, custom_config_spark={}) -> None:
@@ -36,4 +38,5 @@ def save(df: DataFrame, config_ingest: dict, custom_config_spark={}) -> None:
         custom_config_spark (dict, optional): Configurações personalizadas do Spark.
                                               Custom Spark configurations.
     """
+    log_info('DataSaver.save_data')
     DataSaver.save_data(df, config_ingest, custom_config_spark)

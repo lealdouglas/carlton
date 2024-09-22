@@ -13,7 +13,7 @@ class PathBuilder:
         ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/{config['path_src']}/"
         config[
             'schemaLocation'
-        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/{config['table_name']}/_schemaLocation"
+        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/_schemaLocation/{config['table_name']}/"
         config[
             'table_path'
         ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.windows.net/{config['table_name']}/"

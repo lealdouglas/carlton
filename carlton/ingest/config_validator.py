@@ -1,5 +1,6 @@
 # config_validator.py
 from carlton.utils.validator import Validator
+from carlton.utils.logger import log_info
 
 
 class ConfigValidator:
@@ -11,4 +12,6 @@ class ConfigValidator:
         :param required_args: List of required argument keys.
         :param config: Configuration dictionary to validate.
         """
+        
+        log_info(f'Validating configuration arguments: {required_args}')
         Validator.validate_args(required_args, config)
