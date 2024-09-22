@@ -45,7 +45,7 @@ def main(args=sys.argv[1:]):
 
         # Processa os argumentos
         # Process the arguments
-
+        print(args)
         root_properties = process_args(args)
 
         # Imprime as propriedades raiz
