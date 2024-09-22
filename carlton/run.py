@@ -1,7 +1,10 @@
 import sys
+
 from pyspark.sql import SparkSession
+
 from carlton.ingest.table import read, save
 from carlton.utils.logger import log_error, log_info
+
 
 def process_args(args):
     """
@@ -22,6 +25,7 @@ def process_args(args):
             root_properties[arg.replace('-', '')] = args[i + 1]
     return root_properties
 
+
 def create_spark_session(app_name):
     """
     Cria ou obtém uma sessão Spark.
@@ -36,6 +40,7 @@ def create_spark_session(app_name):
                       The Spark session.
     """
     return SparkSession.builder.appName(app_name).getOrCreate()
+
 
 def main(args=sys.argv[1:]):
     """
@@ -84,5 +89,6 @@ def main(args=sys.argv[1:]):
         # Log any error that occurs
         log_error(str(e))
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()
