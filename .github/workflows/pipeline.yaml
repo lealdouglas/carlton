@@ -1,4 +1,4 @@
-name: Pipeline
+name: Pipeline coverage
 
 # on: workflow_dispatch:
 on: [push, pull_request]

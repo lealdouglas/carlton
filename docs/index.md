@@ -34,5 +34,3 @@ Interessado em contribuir? Confira as diretrizes na seção [Contribuindo](contr
 ## Documentação Completa
 
 Para informações detalhadas sobre a configuração, uso e exemplos, explore a documentação completa nas seções subsequentes.
-
-{% include "templates/cards.html" %}
