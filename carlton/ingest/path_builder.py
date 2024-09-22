@@ -10,14 +10,14 @@ class PathBuilder:
         """
         config[
             'carlton_file_path'
-        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/{config['path_src']}/"
+        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.core.windows.net/{config['path_src']}/"
         config[
             'schemaLocation'
-        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.windows.net/_schemaLocation/{config['table_name']}/"
+        ] = f"abfss://{config['container_src']}@{config['storage_name_src']}.dfs.core.windows.net/_schemaLocation/{config['table_name']}/"
         config[
             'table_path'
-        ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.windows.net/{config['table_name']}/"
+        ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.core.windows.net/{config['table_name']}/"
         config[
             'checkpointLocation'
-        ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.windows.net/{config['table_name']}/_checkpointLocation"
+        ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.core.windows.net/{config['table_name']}/_checkpointLocation"
         return config
