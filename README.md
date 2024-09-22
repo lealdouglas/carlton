@@ -3,6 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/carlton/badge/?version=latest)](https://carlton.readthedocs.io/pt-br/latest/?badge=latest)
 [![CI](https://github.com/lealdouglas/carlton/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/lealdouglas/carlton/actions/workflows/pipeline.yaml)
 [![PyPI version](https://badge.fury.io/py/carlton.svg)](https://badge.fury.io/py/carlton)
+[![codecov](https://codecov.io/gh/lealdouglas/carlton/graph/badge.svg?token=4RXRDPQDV4)](https://codecov.io/gh/lealdouglas/carlton)
 
 ## Introdução
 
