@@ -22,6 +22,11 @@ class DataReader:
         Returns:
             DataFrame: DataFrame contendo os dados lidos.
                        DataFrame containing the read data.
+
+        Example:
+            >>> config_ingest = {'type_run': 'batch','file_extension': 'csv','file_resource': 'adls','container_src': 'source_container','storage_name_src': 'source_storage','container_tgt': 'target_container','storage_name_tgt': 'target_storage','path_src': 'source_path','file_header': 'true','file_delimiter': ',','schemaLocation': 'schema_location','carlton_file_path': 'path/to/data'}
+            >>> custom_config_spark = {'spark.some.config.option': 'some-value'}
+            >>> df = DataReader.read_data(config_ingest, custom_config_spark)
         """
         try:
             # Configura o autoloader com as configurações de ingestão

@@ -9,7 +9,7 @@ class TableManager:
     @staticmethod
     def drop_table_path(schema_name: str, table_name: str):
         """
-        Remove a tabela especificada e seu caminho associado.
+        Remove a tabela especificada e seu caminho associado.\n
         Drops the specified table and its associated path.
 
         Args:

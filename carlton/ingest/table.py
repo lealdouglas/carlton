@@ -1,12 +1,12 @@
 # table.py
-from data_reader import DataReader
-from data_saver import DataSaver
+from carlton.ingest.data_reader import DataReader
+from carlton.ingest.data_saver import DataSaver
 from pyspark.sql import DataFrame
 
 
 def read(config_ingest: dict, custom_config_spark={}) -> DataFrame:
     """
-    Função wrapper para ler dados usando DataReader.
+    Função wrapper para ler dados usando DataReader.\n
     Wrapper function to read data using DataReader.
 
     Args:
@@ -24,7 +24,7 @@ def read(config_ingest: dict, custom_config_spark={}) -> DataFrame:
 
 def save(df: DataFrame, config_ingest: dict, custom_config_spark={}) -> None:
     """
-    Função wrapper para salvar dados usando DataSaver.
+    Função wrapper para salvar dados usando DataSaver.\n
     Wrapper function to save data using DataSaver.
 
     Args:

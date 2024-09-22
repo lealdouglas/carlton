@@ -3,7 +3,7 @@ class Validator:
     @staticmethod
     def validate_args(args_needed: list, args_user: dict):
         """
-        Valida se o dicionário fornecido contém os parâmetros necessários.
+        Valida se o dicionário fornecido contém os parâmetros necessários.\n
         Validates if the provided dictionary contains the required parameters.
 
         Args:

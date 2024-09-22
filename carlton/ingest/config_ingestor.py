@@ -1,6 +1,6 @@
 # config_ingestor.py
-from config_validator import ConfigValidator
-from path_builder import PathBuilder
+from carlton.ingest.config_validator import ConfigValidator
+from carlton.ingest.path_builder import PathBuilder
 
 from carlton.utils.logger import log_error, log_info
 
@@ -9,10 +9,20 @@ class ConfigIngestor:
     @staticmethod
     def get_params_path(config):
         """
+        Obtém os caminhos apropriados com base no tipo de recurso do arquivo.\n
         Get the appropriate paths based on the file resource type.
 
-        :param config: Configuration dictionary containing necessary keys.
-        :return: Updated configuration dictionary with paths.
+        Args:
+            config (dict): Dicionário de configuração contendo as chaves necessárias.
+                           Configuration dictionary containing necessary keys.
+
+        Returns:
+            dict: Dicionário de configuração atualizado com os caminhos.
+                  Updated configuration dictionary with paths.
+
+        Example:
+            >>> config = {'file_resource': 'adls','container_src': 'source_container','storage_name_src': 'source_storage', 'container_tgt': 'target_container','storage_name_tgt': 'target_storage','path_src': 'source_path','table_name': 'name_table'}
+            >>> updated_config = ConfigIngestor.get_params_path(config)
         """
         if config['file_resource'] == 'adls':
             ConfigValidator.validate_args(
@@ -22,6 +32,7 @@ class ConfigIngestor:
                     'container_tgt',
                     'storage_name_tgt',
                     'path_src',
+                    'table_name',
                 ],
                 config,
             )
@@ -31,11 +42,22 @@ class ConfigIngestor:
     @staticmethod
     def config_ingest_src(config, custom_config_spark={}):
         """
+        Configura as configurações de ingestão da fonte.\n
         Configure the source ingestion settings.
 
-        :param config: Configuration dictionary containing necessary keys.
-        :param custom_config_spark: Custom Spark configuration dictionary.
-        :return: Dictionary with autoloader configuration.
+        Args:
+            config (dict): Dicionário de configuração contendo as chaves necessárias.
+                           Configuration dictionary containing necessary keys.
+            custom_config_spark (dict, optional): Dicionário de configuração personalizada do Spark.
+                                                  Custom Spark configuration dictionary.
+
+        Returns:
+            dict: Dicionário com a configuração do autoloader.
+                  Dictionary with autoloader configuration.
+
+        Example:
+            >>> config = {'type_run': 'batch','file_extension': 'csv','file_resource': 'adls','container_src': 'source_container','storage_name_src': 'source_storage','container_tgt': 'target_container','storage_name_tgt': 'target_storage','path_src': 'source_path','file_header': 'true','file_delimiter': ',','schemaLocation': 'schema_location','table_name': 'name_table'}
+            >>> autoloader_config = ConfigIngestor.config_ingest_src(config)
         """
         ConfigValidator.validate_args(
             ['type_run', 'file_extension', 'file_resource'], config
@@ -76,11 +98,22 @@ class ConfigIngestor:
     @staticmethod
     def config_ingest_tgt(config, custom_config_spark={}):
         """
+        Configura as configurações de ingestão do destino.\n
         Configure the target ingestion settings.
 
-        :param config: Configuration dictionary containing necessary keys.
-        :param custom_config_spark: Custom Spark configuration dictionary.
-        :return: Dictionary with save configuration.
+        Args:
+            config (dict): Dicionário de configuração contendo as chaves necessárias.
+                           Configuration dictionary containing necessary keys.
+            custom_config_spark (dict, optional): Dicionário de configuração personalizada do Spark.
+                                                  Custom Spark configuration dictionary.
+
+        Returns:
+            dict: Dicionário com a configuração de salvamento.
+                  Dictionary with save configuration.
+
+        Example:
+            >>> config = {'table_path': '/path/to/table','checkpointLocation': '/path/to/checkpoint'}
+            >>> save_config = ConfigIngestor.config_ingest_tgt(config)
         """
         ConfigValidator.validate_args(
             ['table_path', 'checkpointLocation'], config

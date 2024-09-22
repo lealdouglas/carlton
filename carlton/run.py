@@ -4,11 +4,12 @@ from pyspark.sql import SparkSession
 
 from carlton.ingest.table import read, save
 from carlton.utils.logger import log_error, log_info
+from carlton.utils.spark_session_manager import SparkSessionManager
 
 
 def process_args(args):
     """
-    Processa os argumentos passados para a função.
+    Processa os argumentos passados para a função.\n
     Processes the arguments passed to the function.
 
     Args:
@@ -26,25 +27,9 @@ def process_args(args):
     return root_properties
 
 
-def create_spark_session(app_name):
-    """
-    Cria ou obtém uma sessão Spark.
-    Creates or gets a Spark session.
-
-    Args:
-        app_name (str): Nome do aplicativo Spark.
-                        Spark application name.
-
-    Returns:
-        SparkSession: A sessão Spark.
-                      The Spark session.
-    """
-    return SparkSession.builder.appName(app_name).getOrCreate()
-
-
 def main(args=sys.argv[1:]):
     """
-    Função principal para executar a ingestão de dados.
+    Função principal para executar a ingestão de dados.\n
     Main function to execute data ingestion.
 
     Args:
@@ -71,7 +56,7 @@ def main(args=sys.argv[1:]):
 
         # Criação de SparkSession
         # Create SparkSession
-        spark = create_spark_session('Carlton Ingest APP')
+        spark = SparkSessionManager.create_spark_session('Carlton Ingest APP')
 
         # Leitura de dados
         # Read data

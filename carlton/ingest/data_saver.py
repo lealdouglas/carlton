@@ -1,8 +1,8 @@
 # data_saver.py
-from config_validator import ConfigValidator
 from pyspark.sql import DataFrame, SparkSession
 
 from carlton.ingest.config_ingestor import ConfigIngestor
+from carlton.ingest.config_validator import ConfigValidator
 from carlton.utils.logger import log_error, log_info
 
 
@@ -22,6 +22,17 @@ class DataSaver:
                                   Ingestion configurations.
             custom_config_spark (dict, optional): Configurações personalizadas do Spark.
                                                   Custom Spark configurations.
+
+        Example:
+            >>> from pyspark.sql import SparkSession
+            >>> from data_saver import DataSaver
+            >>> spark = SparkSession.builder.appName("example").getOrCreate()
+            >>> data = [("Alice", 1), ("Bob", 2)]
+            >>> columns = ["name", "value"]
+            >>> df = spark.createDataFrame(data, columns)
+            >>> config_ingest = {'schema_name': 'default','table_name': 'example_table','table_path': '/path/to/table','type_run': 'batch','trigger_processing_time': '10 seconds'}
+            >>> custom_config_spark = {'spark.some.config.option': 'some-value'}
+            >>> DataSaver.save_data(df, config_ingest, custom_config_spark)
         """
         try:
             # Valida os argumentos necessários
@@ -92,7 +103,9 @@ class DataSaver:
                 type_trigger['availableNow'] = True
             else:
                 log_info(f'Identifying execution as stream')
-                validate_args(['trigger_processing_time'], config_ingest)
+                ConfigValidator.validate_args(
+                    ['trigger_processing_time'], config_ingest
+                )
                 type_trigger['processingTime'] = config_ingest[
                     'trigger_processing_time'
                 ]
