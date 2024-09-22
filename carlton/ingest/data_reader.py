@@ -8,7 +8,9 @@ from carlton.utils.logger import log_error, log_info
 
 class DataReader:
     @staticmethod
-    def read_data(spark:SparkSession, config_ingest: dict, custom_config_spark={}) -> DataFrame:
+    def read_data(
+        spark: SparkSession, config_ingest: dict, custom_config_spark={}
+    ) -> DataFrame:
         """
         Lê dados de uma fonte especificada usando as configurações fornecidas.
         Reads data from a specified source using the provided configurations.
@@ -38,11 +40,9 @@ class DataReader:
 
             # Registra as configurações usadas para leitura
             # Log the configurations used for reading
-            log_info(
-                f'Configurations used for reading: {autoloader_config}'
-            )
+            log_info(f'Configurations used for reading: {autoloader_config}')
 
-            log_error(f"load file from {config_ingest['carlton_file_path']}")
+            log_info(f"load file from {config_ingest['carlton_file_path']}")
 
             # Lê os dados da fonte especificada e retorna um DataFrame
             # Read the data from the specified source and return a DataFrame

@@ -12,6 +12,6 @@ class ConfigValidator:
         :param required_args: List of required argument keys.
         :param config: Configuration dictionary to validate.
         """
-        
+
         log_info(f'Validating configuration arguments: {required_args}')
         Validator.validate_args(required_args, config)

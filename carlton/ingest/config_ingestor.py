@@ -63,7 +63,9 @@ class ConfigIngestor:
             ['type_run', 'file_extension', 'file_resource'], config
         )
 
-        log_info('prepara os caminhos apropriados com base no tipo de recurso do arquivo')
+        log_info(
+            'prepara os caminhos apropriados com base no tipo de recurso do arquivo'
+        )
         config = ConfigIngestor.get_params_path(config)
 
         autoloader_config_csv = {}

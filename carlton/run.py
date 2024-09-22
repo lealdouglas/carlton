@@ -59,7 +59,7 @@ def main(args=sys.argv[1:]):
 
         # Leitura de dados
         # Read data
-        
+
         df = read(spark, root_properties)
 
         # Salvamento de dados

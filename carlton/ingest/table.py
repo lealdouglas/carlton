@@ -6,7 +6,9 @@ from carlton.ingest.data_saver import DataSaver
 from carlton.utils.logger import log_info
 
 
-def read(spark:SparkSession, config_ingest: dict, custom_config_spark={}) -> DataFrame:
+def read(
+    spark: SparkSession, config_ingest: dict, custom_config_spark={}
+) -> DataFrame:
     """
     Função wrapper para ler dados usando DataReader.\n
     Wrapper function to read data using DataReader.
