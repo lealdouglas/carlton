@@ -1,6 +1,6 @@
 # config_validator.py
-from carlton.utils.validator import Validator
 from carlton.utils.logger import log_info
+from carlton.utils.validator import Validator
 
 
 class ConfigValidator:

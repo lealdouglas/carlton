@@ -25,6 +25,16 @@ def config_ingest():
 
 
 @pytest.fixture
+def spark():
+    return MagicMock(spec=SparkSession)
+
+
+@pytest.fixture
+def config_ingest():
+    return {'some_key': 'some_value'}
+
+
+@pytest.fixture
 def custom_config_spark():
     return {'spark.some.config.option': 'some-value'}
 
@@ -40,10 +50,12 @@ def test_read(mock_read_data, config_ingest, custom_config_spark):
     mock_read_data.return_value = mock_df
 
     # Call the read function
-    result = read(config_ingest, custom_config_spark)
+    result = read(spark, config_ingest, custom_config_spark)
 
     # Assertions
-    mock_read_data.assert_called_once_with(config_ingest, custom_config_spark)
+    mock_read_data.assert_called_once_with(
+        spark, config_ingest, custom_config_spark
+    )
     assert result == mock_df
 
 

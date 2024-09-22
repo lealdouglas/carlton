@@ -7,8 +7,8 @@ from carlton.ingest.table import read, save
 from carlton.utils.logger import log_error, log_info
 from carlton.utils.spark_session_manager import SparkSessionManager
 
-
 # COMMAND ----------
+
 
 def process_args(args):
     """
@@ -37,7 +37,35 @@ log_info('Ingestão iniciada')
 
 # Processa os argumentos
 # Process the arguments
-args = ['ingest', '-function', 'ingest', '-storage_name_src', 'stadrisk', '-container_src', 'ctrdriskraw', '-file_resource', 'adls', '-type_run', 'batch', '-storage_name_tgt', 'stadrisk', '-container_tgt', 'dtmaster-catalog', '-schema_name', 'bronze', '-table_name', 'table_test', '-file_extension', 'csv', '-path_src', 'table_test', '-file_header', 'true', '-file_delimiter', ',']
+args = [
+    'ingest',
+    '-function',
+    'ingest',
+    '-storage_name_src',
+    'stadrisk',
+    '-container_src',
+    'ctrdriskraw',
+    '-file_resource',
+    'adls',
+    '-type_run',
+    'batch',
+    '-storage_name_tgt',
+    'stadrisk',
+    '-container_tgt',
+    'dtmaster-catalog',
+    '-schema_name',
+    'bronze',
+    '-table_name',
+    'table_test',
+    '-file_extension',
+    'csv',
+    '-path_src',
+    'table_test',
+    '-file_header',
+    'true',
+    '-file_delimiter',
+    ',',
+]
 print(args)
 root_properties = process_args(args)
 
@@ -53,13 +81,3 @@ spark = SparkSessionManager.create_spark_session('Carlton Ingest APP')
 # COMMAND ----------
 
 df = read(spark, root_properties)
-
-# COMMAND ----------
-
-
-# Leitura de dados
-# Read data
-
-
-display(df)
-

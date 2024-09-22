@@ -27,10 +27,10 @@ def test_build_adls_paths(config):
         'storage_name_tgt': 'target_storage',
         'path_src': 'source_path',
         'table_name': 'table_name',
-        'carlton_file_path': 'abfss://source_container@source_storage.dfs.windows.net/source_path/',
-        'schemaLocation': 'abfss://source_container@source_storage.dfs.windows.net/table_name/_schemaLocation',
-        'table_path': 'abfss://target_container@target_storage.dfs.windows.net/table_name/',
-        'checkpointLocation': 'abfss://target_container@target_storage.dfs.windows.net/table_name/_checkpointLocation',
+        'carlton_file_path': 'abfss://source_container@source_storage.dfs.core.windows.net/source_path/',
+        'schemaLocation': 'abfss://source_container@source_storage.dfs.core.windows.net/_schemaLocation/table_name/',
+        'table_path': 'abfss://target_container@target_storage.dfs.core.windows.net/table_name/',
+        'checkpointLocation': 'abfss://target_container@target_storage.dfs.core.windows.net/table_name/_checkpointLocation',
     }
 
     result = PathBuilder.build_adls_paths(config)
