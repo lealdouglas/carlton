@@ -14,7 +14,7 @@ build:
     post_create_environment:
       - pip install poetry
       - poetry config virtualenvs.create false
-      - poetry lock [--no-update]
+      - poetry lock --no-update
 
     post_install:
       - poetry install --only doc
