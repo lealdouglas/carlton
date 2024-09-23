@@ -5,18 +5,20 @@
 [![PyPI version](https://badge.fury.io/py/carlton.svg)](https://badge.fury.io/py/carlton)
 [![codecov](https://codecov.io/gh/lealdouglas/carlton/graph/badge.svg?token=4RXRDPQDV4)](https://codecov.io/gh/lealdouglas/carlton)
 
+# Carlton Framework
+
 ## Introdução
 
-Bem-vindo à documentação da Carlton, uma poderosa biblioteca de ingestão de dados na cloud. Carlton foi projetada para simplificar o processo de captura e transformação de dados armazenados em um data lake, seguindo os padrões de ingestão da arquitetura de medalhão da Databricks.
+Bem-vindo à [documentação da Carlton](https://carlton.readthedocs.io/pt-br/latest/), uma poderosa biblioteca de ingestão de dados na cloud. Carlton foi projetada para simplificar o processo de captura e transformação de dados armazenados em um data lake, seguindo os padrões de ingestão da arquitetura de medalhão da Databricks.
 
-A arquitetura de medalhão organiza os dados em três camadas: **Bronze**, **Silver**, e **Gold**. Cada uma dessas camadas desempenha um papel crucial na preparação dos dados para consumo final, e Carlton automatiza as etapas necessárias para mover os dados entre essas camadas de forma eficiente.
+Esse framework foi elaborado para o projeto [Data Master Douglas Leal](https://carlton.readthedocs.io/pt-br/latest/03_projeto/), onde Carlton é utilizado como [biblioteca padrão de utilizacão](https://carlton.readthedocs.io/pt-br/latest/03_projeto/#33-ideacao-do-projeto).
 
 ## Funcionalidades Principais
 
-- **Captura de Dados:** Carlton permite capturar dados de diversas fontes e armazená-los na camada Bronze do data lake.
-- **Transformação de Dados:** Após a captura, os dados são transformados e movidos para as camadas Silver e Gold, garantindo que estejam prontos para consumo.
+A arquitetura de medalhão organiza os dados em três camadas: **Bronze**, **Silver**, e **Gold**. Cada uma dessas camadas desempenha um papel crucial na preparação dos dados para consumo final. Atualmente, Carlton fornece cobertura as principais funcionalidade:
+
 - **Conformidade com Padrões:** Todos os dados ingeridos e transformados seguem os padrões de ingestão e qualidade da arquitetura de medalhão da Databricks.
-- **Interface Simplificada:** Carlton oferece uma interface fácil de usar para configuração e execução de pipelines de ingestão de dados.
+- **Qualidade nos dados:** Gerando logs de dados necessários para tomada de decisão.
 
 ## Casos de Uso
 
@@ -24,22 +26,17 @@ Carlton é ideal para:
 
 - Equipes de dados que precisam automatizar o processo de ingestão em ambientes de nuvem.
 - Organizações que utilizam a arquitetura de medalhão da Databricks para gerenciar seus dados.
-- Aplicações que exigem dados prontos para análise, ciência de dados ou aprendizado de máquina.
 
 ## Começando
 
-Para começar a utilizar Carlton, siga as instruções detalhadas na seção [Instalação](docs/installation.md).
+Para começar a utilizar Carlton, siga as instruções detalhadas na seção [início rápido](https://carlton.readthedocs.io/pt-br/latest/02_comecando/).
 
-## Contribuindo
+## Código Completo
 
-Interessado em contribuir? Confira as diretrizes na seção [Contribuindo](docs/contributing.md) para saber como ajudar no desenvolvimento da Carlton.
-
-## Documentação Completa
-
-Para informações detalhadas sobre a configuração, uso e exemplos, explore a documentação completa nas seções subsequentes.
+[lealdouglas/carlton](https://github.com/lealdouglas/carlton) para acesso ao código.
 
 ## Referências
 
-- [Documentação da Databricks](https://docs.databricks.com/)
-- [Arquitetura de Medalhão](https://databricks.com/solutions/data-lakehouse)
-- [Guia de Contribuição do GitHub](https://docs.github.com/pt/github/collaborating-with-issues-and-pull-requests)
+- [Poetry Documentation](https://python-poetry.org/docs/)
+- [Data Contract](https://datacontract.com/)
+- [Medallion Architecture](https://www.databricks.com/br/glossary/medallion-architecture)
