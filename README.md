@@ -29,8 +29,6 @@ Carlton é ideal para:
 
 ## Começando
 
-Para começar a utilizar Carlton, siga as instruções detalhadas na seção [início rápido](https://carlton.readthedocs.io/pt-br/latest/02_comecando/).
-
 ### 1. Pré-requisitos
 
 Atualmente, Carlton foi desenvolvido para ser utilizado em um ambiente cloud, que executa em python. Sua fonte principal de consumo dos dados, quando ingestão, é o adls e/ou eventhub.
