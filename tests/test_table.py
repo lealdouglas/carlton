@@ -69,9 +69,9 @@ def test_save(mock_save_data, config_ingest, custom_config_spark):
     mock_df = MagicMock(spec=DataFrame)
 
     # Call the save function
-    save(mock_df, config_ingest, custom_config_spark)
+    save(spark, mock_df, config_ingest, custom_config_spark)
 
     # Assertions
     mock_save_data.assert_called_once_with(
-        mock_df, config_ingest, custom_config_spark
+        spark, mock_df, config_ingest, custom_config_spark
     )
