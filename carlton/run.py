@@ -64,7 +64,7 @@ def main(args=sys.argv[1:]):
 
         # Salvamento de dados
         # Save data
-        # save(df, root_properties)
+        save(spark, df, root_properties)
 
         log_info('Ingestão finalizada')
         # Data ingestion finished

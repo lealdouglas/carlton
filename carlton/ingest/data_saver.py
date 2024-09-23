@@ -9,7 +9,10 @@ from carlton.utils.logger import log_error, log_info
 class DataSaver:
     @staticmethod
     def save_data(
-        df: DataFrame, config_ingest: dict, custom_config_spark={}
+        spark: SparkSession,
+        df: DataFrame,
+        config_ingest: dict,
+        custom_config_spark={},
     ) -> None:
         """
         Salva os dados do DataFrame em um destino especificado usando as configurações fornecidas.
@@ -51,10 +54,6 @@ class DataSaver:
             # Registra as configurações usadas para escrita
             # Log the configurations used for writing
             log_info('Configurations used for writing: ', msg_dict=save_config)
-
-            # Cria ou obtém uma sessão Spark
-            # Create or get a Spark session
-            spark = SparkSession.builder.getOrCreate()
 
             # Lista de colunas internas que não devem ser incluídas na tabela
             # List of internal columns that should not be included in the table

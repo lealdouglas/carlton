@@ -27,7 +27,12 @@ def read(
     return DataReader.read_data(spark, config_ingest, custom_config_spark)
 
 
-def save(df: DataFrame, config_ingest: dict, custom_config_spark={}) -> None:
+def save(
+    spark: SparkSession,
+    df: DataFrame,
+    config_ingest: dict,
+    custom_config_spark={},
+) -> None:
     """
     Função wrapper para salvar dados usando DataSaver.\n
     Wrapper function to save data using DataSaver.
@@ -41,4 +46,4 @@ def save(df: DataFrame, config_ingest: dict, custom_config_spark={}) -> None:
                                               Custom Spark configurations.
     """
     log_info('DataSaver.save_data')
-    DataSaver.save_data(df, config_ingest, custom_config_spark)
+    DataSaver.save_data(spark, df, config_ingest, custom_config_spark)
