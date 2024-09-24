@@ -11,7 +11,7 @@
 
 Bem-vindo à documentação da Carlton, uma poderosa biblioteca de ingestão de dados na cloud. Carlton foi projetada para simplificar o processo de captura e transformação de dados armazenados em um data lake, seguindo os padrões de ingestão da arquitetura de medalhão da Databricks.
 
-Esse framework foi elaborado para o projeto [Data Master Douglas Leal](02_projeto.md), onde Carlton é utilizado como [biblioteca padrão de utilizacão](02_projeto.md/#33-ideacao-do-projeto).
+Esse framework foi elaborado para o projeto [Data Master Douglas Leal](https://carlton.readthedocs.io/pt-br/latest/03_projeto/), onde Carlton é utilizado como [biblioteca padrão de utilizacão](https://carlton.readthedocs.io/pt-br/latest/03_projeto/#33-ideacao-do-projeto).
 
 ## Funcionalidades Principais
 
