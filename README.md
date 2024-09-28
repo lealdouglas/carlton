@@ -11,6 +11,10 @@ Bem-vindo à [documentação da Carlton](https://carlton.readthedocs.io/pt-br/la
 
 Esse framework foi elaborado para o projeto [Data Master Douglas Leal](https://carlton.readthedocs.io/pt-br/latest/03_projeto/), onde Carlton é utilizado como [biblioteca padrão de utilizacão](https://carlton.readthedocs.io/pt-br/latest/03_projeto/#33-ideacao-do-projeto).
 
+## 1. Objetivo do Case
+
+Este projeto visa desenvolver uma solução de engenharia de dados com o principal objetivo de preparar um ambiente para estudo e exploração de dados baseado em nuvem em poucos minutos. O projeto simula a criação de um ambiente conceitual de dados para um domínio de dados, configurando o ambiente para realizar ações como pipelines de ingestão e exploração de dados. Carlton é responsável por padronizar e garantir a qualidade técnica desse case.
+
 ## Funcionalidades Principais
 
 A arquitetura de medalhão organiza os dados em três camadas: **Bronze**, **Silver**, e **Gold**. Cada uma dessas camadas desempenha um papel crucial na preparação dos dados para consumo final. Atualmente, Carlton fornece cobertura as principais funcionalidade:
