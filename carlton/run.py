@@ -72,7 +72,7 @@ def main(args=sys.argv[1:]):
     except Exception as e:
         # Loga qualquer erro que ocorrer
         # Log any error that occurs
-        log_error(str(e))
+        raise log_error(str(e))
 
 
 if __name__ == '__main__':

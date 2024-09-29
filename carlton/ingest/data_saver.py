@@ -53,7 +53,7 @@ class DataSaver:
 
             # Registra as configurações usadas para escrita
             # Log the configurations used for writing
-            log_info('Configurations used for writing: ', msg_dict=save_config)
+            log_info(f'Configurations used for writing: {save_config}')
 
             # Lista de colunas internas que não devem ser incluídas na tabela
             # List of internal columns that should not be included in the table
