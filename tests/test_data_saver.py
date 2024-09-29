@@ -73,12 +73,11 @@ def test_save_data_success(
         config_ingest, custom_config_spark
     )
     mock_log_info.assert_any_call(
-        'Configurations used for writing: ',
-        msg_dict=mock_config_ingest_tgt.return_value,
+        f'Configurations used for writing: {mock_config_ingest_tgt.return_value}'
     )
 
     # Verify table creation query
-    expected_query = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} (,_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date) LOCATION '{config_ingest['table_path']}'"""
+    expected_query = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} (,_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date)"""
     mock_spark.sql.assert_called_once_with(expected_query)
 
     # Verify writeStream call
