@@ -125,7 +125,7 @@ class ConfigIngestor:
 
         save_config = {
             'checkpointLocation': config['checkpointLocation'],
-            'path': config['table_path'],
+            # 'path': config['table_path'],
             'mergeSchema': True,
             **custom_config_spark,
         }

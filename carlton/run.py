@@ -72,7 +72,8 @@ def main(args=sys.argv[1:]):
     except Exception as e:
         # Loga qualquer erro que ocorrer
         # Log any error that occurs
-        raise log_error(str(e))
+        log_error(str(e))
+        sys.exit(1)  # Exit the process with an error code
 
 
 if __name__ == '__main__':

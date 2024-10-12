@@ -19,5 +19,8 @@ class PathBuilder:
         ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.core.windows.net/{config['table_name']}/"
         config[
             'checkpointLocation'
-        ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.core.windows.net/{config['table_name']}/_checkpointLocation"
+        ] = f"/Volumes/crisk/bronze/volume_checkpoint_locations/{config['table_name']}/"
         return config
+
+
+# ] = f"abfss://{config['container_tgt']}@{config['storage_name_tgt']}.dfs.core.windows.net/{config['table_name']}/_checkpointLocation"
