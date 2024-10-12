@@ -23,8 +23,12 @@ def read(
         DataFrame: DataFrame contendo os dados lidos.
                    DataFrame containing the read data.
     """
-    log_info('DataReader.read_data')
-    return DataReader.read_data(spark, config_ingest, custom_config_spark)
+    try:
+        log_info('DataReader.read_data')
+        return DataReader.read_data(spark, config_ingest, custom_config_spark)
+    except Exception as e:
+        log_error(f'Erro na função read: {str(e)}')
+        raise
 
 
 def save(
@@ -45,5 +49,9 @@ def save(
         custom_config_spark (dict, optional): Configurações personalizadas do Spark.
                                               Custom Spark configurations.
     """
-    log_info('DataSaver.save_data')
-    DataSaver.save_data(spark, df, config_ingest, custom_config_spark)
+    try:
+        log_info('DataSaver.save_data')
+        DataSaver.save_data(spark, df, config_ingest, custom_config_spark)
+    except Exception as e:
+        log_error(f'Erro na função save: {str(e)}')
+        raise

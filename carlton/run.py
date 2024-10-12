@@ -59,12 +59,19 @@ def main(args=sys.argv[1:]):
 
         # Leitura de dados
         # Read data
-
-        df = read(spark, root_properties)
+        try:
+            df = read(spark, root_properties)
+        except Exception as e:
+            log_error(f'Erro ao ler dados: {str(e)}')
+            sys.exit(1)
 
         # Salvamento de dados
         # Save data
-        save(spark, df, root_properties)
+        try:
+            save(spark, df, root_properties)
+        except Exception as e:
+            log_error(f'Erro ao salvar dados: {str(e)}')
+            sys.exit(1)
 
         log_info('Ingestão finalizada')
         # Data ingestion finished

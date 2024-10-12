@@ -90,7 +90,7 @@ def test_main_success(
 @patch('carlton.run.read')
 @patch('carlton.run.save')
 @patch('carlton.run.SparkSessionManager.create_spark_session')
-def test_main_exception(
+def test_main_read_exception(
     mock_create_spark_session,
     mock_save,
     mock_read,
@@ -99,23 +99,73 @@ def test_main_exception(
     args,
 ):
     """
-    Testa a função main para verificar se os erros são logados corretamente.
-    Tests the main function to check if errors are logged correctly.
+    Testa a função main para verificar se os erros na leitura são logados corretamente.
+    Tests the main function to check if read errors are logged correctly.
     """
-    # Mock the Spark session and DataFrame
+    # Mock the Spark session
     mock_spark = MagicMock()
     mock_create_spark_session.return_value = mock_spark
 
     # Mock the read function to raise an exception
-    mock_read.side_effect = Exception('Test exception')
+    mock_read.side_effect = Exception('Test read exception')
 
     # Call the main function
-    with pytest.raises(Exception):
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
         main(args)
 
     # Check if log_error is called with the exception message
-    mock_log_error.assert_called_once_with('Test exception')
+    mock_log_error.assert_called_once_with(
+        'Erro ao ler dados: Test read exception'
+    )
 
     # Ensure log_info is called for the start but not for the end
     mock_log_info.assert_any_call('Ingestão iniciada')
     mock_log_info.assert_called_with('type_run: batch')
+
+    # Check if the system exited with code 1
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
+
+
+@patch('carlton.run.log_info')
+@patch('carlton.run.log_error')
+@patch('carlton.run.read')
+@patch('carlton.run.save')
+@patch('carlton.run.SparkSessionManager.create_spark_session')
+def test_main_save_exception(
+    mock_create_spark_session,
+    mock_save,
+    mock_read,
+    mock_log_error,
+    mock_log_info,
+    args,
+):
+    """
+    Testa a função main para verificar se os erros no salvamento são logados corretamente.
+    Tests the main function to check if save errors are logged correctly.
+    """
+    # Mock the Spark session and DataFrame
+    mock_spark = MagicMock()
+    mock_df = MagicMock()
+    mock_create_spark_session.return_value = mock_spark
+    mock_read.return_value = mock_df
+
+    # Mock the save function to raise an exception
+    mock_save.side_effect = Exception('Test save exception')
+
+    # Call the main function
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        main(args)
+
+    # Check if log_error is called with the exception message
+    mock_log_error.assert_called_once_with(
+        'Erro ao salvar dados: Test save exception'
+    )
+
+    # Ensure log_info is called for the start but not for the end
+    mock_log_info.assert_any_call('Ingestão iniciada')
+    mock_log_info.assert_called_with('type_run: batch')
+
+    # Check if the system exited with code 1
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
