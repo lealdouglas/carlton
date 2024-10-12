@@ -59,6 +59,7 @@ def main(args=sys.argv[1:]):
 
         # Leitura de dados
         # Read data
+
         try:
             df = read(spark, root_properties)
         except Exception as e:
@@ -84,4 +85,10 @@ def main(args=sys.argv[1:]):
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        # Loga qualquer erro que ocorrer
+        # Log any error that occurs
+        log_error(str(e))
+        sys.exit(1)  # Exit the process with an error code
