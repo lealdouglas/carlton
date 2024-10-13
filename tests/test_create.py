@@ -25,8 +25,13 @@ def test_get_absolute_path_with_dbutils(mock_dbutils):
     mock_dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get.return_value = (
         '/Workspace/Projects/Notebook'
     )
-    relative_path = ('/jarvis/prep/datacontract/', 'datacontract.yaml')
-    expected_path = '/Workspace\jarvis\prep\datacontract\datacontract.yaml'
+    relative_path = (
+        '/Workspace/jarvis/prep/datacontract/',
+        'datacontract.yaml',
+    )
+    expected_path = (
+        '/Workspace\Workspace\jarvis\prep\datacontract\datacontract.yaml'
+    )
     assert get_absolute_path(*relative_path) == expected_path
 
 
@@ -45,7 +50,7 @@ def test_create(mock_data_contract, mock_get_absolute_path):
     create(mock_spark)
 
     mock_get_absolute_path.assert_called_once_with(
-        '/jarvis/prep/datacontract/', 'datacontract.yaml'
+        '/Workspace/jarvis/prep/datacontract/', 'datacontract.yaml'
     )
     mock_data_contract.assert_called_once_with(
         data_contract_file='/absolute/path/to/datacontract.yaml'
