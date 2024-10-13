@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "carlton"
-version = "2.2.0"
+version = "2.2.1"
 description = "Carlton, uma poderosa biblioteca de ingestão de dados na cloud"
 license = "Apache License"
 authors = ["Leal <douglas.sleal@outlook.com>"]
@@ -22,6 +22,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.10"
 azure-eventhub = "^5.12.1"
+datacontract-cli = "^0.10.13"
 
 [tool.poetry.scripts]
 carlton = "carlton.run:main"
