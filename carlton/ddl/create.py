@@ -33,4 +33,4 @@ def create(spark: SparkSession, src='adb'):
     print(sql_ddl)
 
     # Create the table in Unity Catalog
-    # spark.sql(sql_ddl)
+    spark.sql(sql_ddl)

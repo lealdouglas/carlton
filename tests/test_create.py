@@ -58,4 +58,4 @@ def test_create(mock_data_contract, mock_get_absolute_path):
     mock_data_contract_instance.export.assert_called_once_with(
         export_format='sql'
     )
-    # mock_spark.sql.assert_called_once_with('CREATE TABLE ...')
+    mock_spark.sql.assert_called_once_with('CREATE TABLE ...')
