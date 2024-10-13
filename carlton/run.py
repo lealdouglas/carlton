@@ -83,7 +83,7 @@ def main(args=sys.argv[1:]):
         if root_properties['function'] == 'create_table':
 
             print('Prep data...')
-            create()
+            create(spark)
 
     except Exception as e:
         # Loga qualquer erro que ocorrer
