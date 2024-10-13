@@ -21,14 +21,10 @@ def get_absolute_path(*relative_parts):
 
 
 def create(spark: SparkSession, src='adb'):
-    if src == 'adb':
-        data_contract_file = get_absolute_path(
-            '/Workspace/jarvis/prep/datacontract/', 'datacontract.yaml'
-        )
-    else:
-        data_contract_file = get_absolute_path(
-            '/jarvis/prep/datacontract/', 'datacontract.yaml'
-        )
+
+    data_contract_file = get_absolute_path(
+        '/Workspace/jarvis/prep/datacontract/', 'datacontract.yaml'
+    )
 
     data_contract = DataContract(data_contract_file=data_contract_file)
     sql_ddl = data_contract.export(export_format='sql')
