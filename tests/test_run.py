@@ -16,6 +16,8 @@ def args():
         '/path/to/table',
         '-type_run',
         'batch',
+        '-function',
+        'ingest',
     ]
 
 
@@ -29,6 +31,7 @@ def test_process_args(args):
         'table_name': 'test_table',
         'table_path': '/path/to/table',
         'type_run': 'batch',
+        'function': 'ingest',
     }
     assert process_args(args) == expected_output
 
@@ -70,6 +73,7 @@ def test_main_success(
             'table_name': 'test_table',
             'table_path': '/path/to/table',
             'type_run': 'batch',
+            'function': 'ingest',
         },
     )
     mock_save.assert_called_once_with(
@@ -80,6 +84,7 @@ def test_main_success(
             'table_name': 'test_table',
             'table_path': '/path/to/table',
             'type_run': 'batch',
+            'function': 'ingest',
         },
     )
     mock_log_error.assert_not_called()
@@ -120,7 +125,7 @@ def test_main_read_exception(
 
     # Ensure log_info is called for the start but not for the end
     mock_log_info.assert_any_call('Ingestão iniciada')
-    mock_log_info.assert_called_with('type_run: batch')
+    mock_log_info.assert_called_with('Ingestão iniciada')
 
     # Check if the system exited with code 1
     assert pytest_wrapped_e.type == SystemExit
@@ -164,8 +169,34 @@ def test_main_save_exception(
 
     # Ensure log_info is called for the start but not for the end
     mock_log_info.assert_any_call('Ingestão iniciada')
-    mock_log_info.assert_called_with('type_run: batch')
+    mock_log_info.assert_called_with('Ingestão iniciada')
 
     # Check if the system exited with code 1
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
+
+
+@patch('carlton.run.log_info')
+@patch('carlton.run.log_error')
+@patch('carlton.run.create')
+@patch('carlton.run.SparkSessionManager.create_spark_session')
+def test_main_create_table(
+    mock_create_spark_session, mock_create, mock_log_error, mock_log_info, args
+):
+    """
+    Testa a função main para verificar se a criação de tabela é executada corretamente.
+    Tests the main function to check if table creation is executed correctly.
+    """
+    # Modify args to test create_table function
+    args[-1] = 'create_table'
+
+    # Mock the Spark session
+    mock_spark = MagicMock()
+    mock_create_spark_session.return_value = mock_spark
+
+    # Call the main function
+    main(args)
+
+    # Assertions
+    mock_create.assert_called_once()
+    mock_log_error.assert_not_called()

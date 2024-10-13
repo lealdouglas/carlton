@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "carlton"
-version = "2.1.0"
+version = "2.2.0"
 description = "Carlton, uma poderosa biblioteca de ingestão de dados na cloud"
 license = "Apache License"
 authors = ["Leal <douglas.sleal@outlook.com>"]
@@ -20,7 +20,7 @@ classifiers = [
 "Bug Tracker" = "https://github.com/lealdouglas/carlton/issues"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 azure-eventhub = "^5.12.1"
 
 [tool.poetry.scripts]
@@ -36,6 +36,7 @@ pyspark = "^3.5.1"
 delta-spark = "^3.2.0"
 pytz = "^2024.1"
 azure-eventhub = "^5.12.1"
+datacontract-cli = "^0.10.13"
 
 
 [tool.poetry.group.doc.dependencies]

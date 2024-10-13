@@ -1,7 +1,9 @@
+import os
 import sys
 
 from pyspark.sql import SparkSession
 
+from carlton.ddl.create import create
 from carlton.ingest.table import read, save
 from carlton.utils.logger import log_error, log_info
 from carlton.utils.spark_session_manager import SparkSessionManager
@@ -40,8 +42,6 @@ def main(args=sys.argv[1:]):
         None
     """
     try:
-        log_info('Ingestão iniciada')
-        # Data ingestion started
 
         # Processa os argumentos
         # Process the arguments
@@ -57,25 +57,33 @@ def main(args=sys.argv[1:]):
         # Create SparkSession
         spark = SparkSessionManager.create_spark_session('Carlton Ingest APP')
 
-        # Leitura de dados
-        # Read data
+        if root_properties['function'] == 'ingest':
 
-        try:
-            df = read(spark, root_properties)
-        except Exception as e:
-            log_error(f'Erro ao ler dados: {str(e)}')
-            sys.exit(1)
+            log_info('Ingestão iniciada')
 
-        # Salvamento de dados
-        # Save data
-        try:
-            save(spark, df, root_properties)
-        except Exception as e:
-            log_error(f'Erro ao salvar dados: {str(e)}')
-            sys.exit(1)
+            # Leitura de dados
+            # Read data
+            try:
+                df = read(spark, root_properties)
+            except Exception as e:
+                log_error(f'Erro ao ler dados: {str(e)}')
+                sys.exit(1)
 
-        log_info('Ingestão finalizada')
-        # Data ingestion finished
+            # Salvamento de dados
+            # Save data
+            try:
+                save(spark, df, root_properties)
+            except Exception as e:
+                log_error(f'Erro ao salvar dados: {str(e)}')
+                sys.exit(1)
+
+            log_info('Ingestão finalizada')
+            # Data ingestion finished
+
+        if root_properties['function'] == 'create_table':
+
+            print('Prep data...')
+            create()
 
     except Exception as e:
         # Loga qualquer erro que ocorrer
