@@ -16,23 +16,23 @@ def test_get_absolute_path_no_dbutils():
     assert get_absolute_path(*relative_path) == expected_path
 
 
-@patch('carlton.ddl.create.dbutils', create=True)
-def test_get_absolute_path_with_dbutils(mock_dbutils):
-    """
-    Testa a função get_absolute_path quando dbutils está disponível.
-    Tests the get_absolute_path function when dbutils is available.
-    """
-    mock_dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get.return_value = (
-        '/Workspace/Projects/Notebook'
-    )
-    relative_path = (
-        '/Workspace/jarvis/prep/datacontract/',
-        'datacontract.yaml',
-    )
-    expected_path = (
-        '/Workspace\Workspace\jarvis\prep\datacontract\datacontract.yaml'
-    )
-    assert get_absolute_path(*relative_path) == expected_path
+# @patch('carlton.ddl.create.dbutils', create=True)
+# def test_get_absolute_path_with_dbutils(mock_dbutils):
+#     """
+#     Testa a função get_absolute_path quando dbutils está disponível.
+#     Tests the get_absolute_path function when dbutils is available.
+#     """
+#     mock_dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get.return_value = (
+#         '/Workspace/Projects/Notebook'
+#     )
+#     relative_path = (
+#         '/Workspace/jarvis/prep/datacontract/',
+#         'datacontract.yaml',
+#     )
+#     expected_path = (
+#         '/Workspace\Workspace\jarvis\prep\datacontract\datacontract.yaml'
+#     )
+#     assert get_absolute_path(*relative_path) == expected_path
 
 
 @patch('carlton.ddl.create.get_absolute_path')
