@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "carlton"
-version = "2.2.5"
+version = "2.3.5"
 description = "Carlton, uma poderosa biblioteca de ingestão de dados na cloud"
 license = "Apache License"
 authors = ["Leal <douglas.sleal@outlook.com>"]
