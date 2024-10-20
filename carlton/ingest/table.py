@@ -3,7 +3,7 @@ from pyspark.sql import DataFrame, SparkSession
 
 from carlton.ingest.data_reader import DataReader
 from carlton.ingest.data_saver import DataSaver
-from carlton.utils.logger import log_info
+from carlton.utils.logger import log_error, log_info
 
 
 def read(

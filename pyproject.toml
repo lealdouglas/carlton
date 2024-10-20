@@ -38,6 +38,7 @@ delta-spark = "^3.2.0"
 pytz = "^2024.1"
 azure-eventhub = "^5.12.1"
 datacontract-cli = "^0.10.13"
+azure-identity = "^1.19.0"
 
 
 [tool.poetry.group.doc.dependencies]

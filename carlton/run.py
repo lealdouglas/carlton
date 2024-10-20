@@ -5,6 +5,7 @@ from pyspark.sql import SparkSession
 
 from carlton.ddl.create import create
 from carlton.ingest.table import read, save
+from carlton.mock.generate import generate_mock_data
 from carlton.utils.logger import log_error, log_info
 from carlton.utils.spark_session_manager import SparkSessionManager
 
@@ -84,6 +85,11 @@ def main(args=sys.argv[1:]):
 
             print('Prep data...')
             create(spark)
+
+        if root_properties['function'] == 'mock_data':
+
+            print('create data...')
+            generate_mock_data(root_properties)
 
     except Exception as e:
         # Loga qualquer erro que ocorrer
