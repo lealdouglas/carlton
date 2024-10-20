@@ -20,7 +20,6 @@ Este projeto visa desenvolver uma solução de engenharia de dados com o princip
 A arquitetura de medalhão organiza os dados em três camadas: **Bronze**, **Silver**, e **Gold**. Cada uma dessas camadas desempenha um papel crucial na preparação dos dados para consumo final. Atualmente, Carlton fornece cobertura as principais funcionalidade:
 
 - **Conformidade com Padrões:** Todos os dados ingeridos e transformados seguem os padrões de ingestão e qualidade da arquitetura de medalhão da Databricks.
-- **Qualidade nos dados:** Gerando logs de dados necessários para tomada de decisão.
 
 ## Casos de Uso
 
