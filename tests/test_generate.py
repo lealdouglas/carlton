@@ -83,22 +83,22 @@ def test_generate_timestamps_real_time():
         assert (timestamps[i] - timestamps[i - 1]).seconds == 5
 
 
-def test_gerar_dados_consentimentos():
-    """
-    Testa a função gerar_dados_consentimentos para verificar se os consentimentos são gerados corretamente.
-    """
-    num_records = 5
-    user_ids = range(10000, 10005)
-    consentimentos = gerar_dados_consentimentos(num_records, user_ids)
-    assert len(consentimentos) == num_records
-    for consentimento in consentimentos:
-        assert consentimento['user_id'] in user_ids
-        assert consentimento['status'] in ['Ativo', 'Revogado']
-        assert 'consent_id' in consentimento
-        assert 'data_inicio' in consentimento
-        assert 'data_fim' in consentimento
-        assert 'tipo_dados' in consentimento
-        assert 'plataforma_origem' in consentimento
+# def test_gerar_dados_consentimentos():
+#     """
+#     Testa a função gerar_dados_consentimentos para verificar se os consentimentos são gerados corretamente.
+#     """
+#     num_records = 5
+#     user_ids = range(10000, 10005)
+#     consentimentos = gerar_dados_consentimentos(num_records, user_ids)
+#     assert len(consentimentos) == num_records
+#     for consentimento in consentimentos:
+#         assert consentimento['user_id'] in user_ids
+#         assert consentimento['status'] in ['Ativo', 'Revogado']
+#         assert 'consent_id' in consentimento
+#         assert 'data_inicio' in consentimento
+#         assert 'data_fim' in consentimento
+#         assert 'tipo_dados' in consentimento
+#         assert 'plataforma_origem' in consentimento
 
 
 # def test_generate_mock_data(

@@ -39,20 +39,20 @@ def generate_timestamps_real_time(num_actions):
 
 
 # Função para gerar consentimentos
-def gerar_dados_consentimentos(num_records=40, user_ids=range(10000, 10020)):
+def gerar_dados_consentimentos():
     start_date = datetime(2023, 1, 1)
     end_date = datetime(2024, 12, 31)
     data_types = [
         'Dados Financeiros',
-        'Dados de Crédito',
+        'Dados de Credito',
         'Dados Pessoais',
-        'Dados de Saúde',
-        'Dados de Localização',
-        'Dados de Navegação',
+        'Dados de Saude',
+        'Dados de Localizacao',
+        'Dados de Navegacao',
         'Dados de Compras',
         'Dados de Contato',
         'Dados de Publicidade',
-        'Dados de Histórico de Navegação',
+        'Dados de Historico de Navegacao',
     ]
     data_type_map = {
         data_type: str(idx).zfill(3)
@@ -61,9 +61,9 @@ def gerar_dados_consentimentos(num_records=40, user_ids=range(10000, 10020)):
 
     consent_data = []
 
-    for i in range(num_records):
-        consent_id = 1000 + i
-        user_id = random.choice(user_ids)
+    for i in range(10000, 10020 + 1):
+        consent_id = f"c{random.choice(['d', 't', 'm'])}{random.choice(range(100, 9999))}"
+        user_id = i
         data_inicio = start_date + timedelta(
             days=random.randint(0, (end_date - start_date).days)
         )
@@ -97,7 +97,7 @@ def gerar_dados_consentimentos(num_records=40, user_ids=range(10000, 10020)):
 
 
 # Simular eventos de 50 usuários em tempo real com intervalo de 5 segundos
-def generate_mock_data(root_properties: dict, num_users=20, sleep_time=120):
+def generate_mock_data(root_properties: dict, sleep_time=120):
 
     # Informações do Service Principal (obtidas no Azure AD)
     TENANT_ID = os.getenv('ARM_TENANT_ID', default='ARM_TENANT_ID')
@@ -110,12 +110,19 @@ def generate_mock_data(root_properties: dict, num_users=20, sleep_time=120):
     )
 
     # Gerar ações de usuários em tempo real
-    dados_consentimentos = gerar_dados_consentimentos(num_users)
+    dados_consentimentos = gerar_dados_consentimentos()
 
     # Configuração do client para enviar eventos
+    fully_qualified_namespace = (
+        f"{root_properties['event_hub_namespace']}.servicebus.windows.net"
+    )
+    eventhub_name = root_properties['event_hub_name']
+
+    log_info(fully_qualified_namespace)
+    log_info(eventhub_name)
     producer = EventHubProducerClient(
-        fully_qualified_namespace=f"{root_properties['event_hub_namespace'],}.servicebus.windows.net",
-        eventhub_name=root_properties['event_hub_name'],
+        fully_qualified_namespace=fully_qualified_namespace,
+        eventhub_name=eventhub_name,
         credential=credential,
     )
 
