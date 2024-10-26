@@ -39,70 +39,62 @@ def generate_timestamps_real_time(num_actions):
     return timestamps
 
 
-# Função para gerar ações de um usuário com mais interações e timestamps reais
-def generate_user_actions_real_time(user_id):
-    actions = [
-        ('Login', True, '', ''),
-        (
-            'Cadastro',
-            random.choice([True, False]),
-            'ERR_400' if random.random() > 0.5 else '',
-            'Dados inválidos' if random.random() > 0.5 else '',
-        ),
-        ('Consulta Saldo', True, '', ''),
-        (
-            'Transferência',
-            random.choice([True, False]),
-            'ERR_402' if random.random() > 0.5 else '',
-            'Saldo insuficiente' if random.random() > 0.5 else '',
-        ),
-        (
-            'Pagamento',
-            random.choice([True, False]),
-            'ERR_503' if random.random() > 0.7 else '',
-            'Serviço indisponível' if random.random() > 0.7 else '',
-        ),
-        ('Consulta Extrato', True, '', ''),
-        (
-            'Atualização Perfil',
-            random.choice([True, False]),
-            'ERR_409' if random.random() > 0.3 else '',
-            'Conflito de dados' if random.random() > 0.3 else '',
-        ),
-        ('Consulta Faturas', True, '', ''),
-        (
-            'Recarga Celular',
-            random.choice([True, False]),
-            'ERR_504' if random.random() > 0.4 else '',
-            'Tempo de resposta excedido' if random.random() > 0.4 else '',
-        ),
-        ('Logout', True, '', ''),
+# Função para gerar consentimentos
+def gerar_dados_consentimentos(num_records=40, user_ids=range(10000, 10020)):
+    start_date = datetime(2023, 1, 1)
+    end_date = datetime(2024, 12, 31)
+    data_types = [
+        'Dados Financeiros',
+        'Dados de Crédito',
+        'Dados Pessoais',
+        'Dados de Saúde',
+        'Dados de Localização',
+        'Dados de Navegação',
+        'Dados de Compras',
+        'Dados de Contato',
+        'Dados de Publicidade',
+        'Dados de Histórico de Navegação',
     ]
+    data_type_map = {
+        data_type: str(idx).zfill(3)
+        for idx, data_type in enumerate(data_types, start=1)
+    }
 
-    # Verifica se o último dígito é ímpar ou par
-    if int(str(user_id)[-1]) % 2 == 0:
-        phone_type = 'iPhone'
-        cidade = 'Sao Paulo'
-    else:
-        phone_type = 'android'
-        cidade = 'Belo Horizonte'
+    consent_data = []
 
-    timestamps = generate_timestamps_real_time(len(actions))
-    return [
-        (
-            user_id,
-            action,
-            timestamps[i],
-            phone_type,
-            cidade,
-            success,
-            error_code,
-            error_message,
+    for i in range(num_records):
+        consent_id = 1000 + i
+        user_id = random.choice(user_ids)
+        data_inicio = start_date + timedelta(
+            days=random.randint(0, (end_date - start_date).days)
         )
-        for i, (action, success, error_code, error_message) in enumerate(
-            actions
+        data_fim = data_inicio + timedelta(
+            days=random.randint(1, 365)
+        )  # Garantir fim após o início
+        tipo_dados = random.choice(data_types)
+        tipo_id = data_type_map[tipo_dados]
+        plataforma_origem = random.choice(['Web', 'Mobile', 'API'])
+        status = random.choice(['Ativo', 'Revogado'])
+
+        # Registro "Ativo"
+        consent_data.append(
+            {
+                'consent_id': consent_id,
+                'user_id': user_id,
+                'data_inicio': data_inicio.strftime('%Y-%m-%d')
+                if status == 'Ativo'
+                else '',
+                'data_fim': data_fim.strftime('%Y-%m-%d')
+                if status == 'Ativo'
+                else '',
+                'tipo_dados': tipo_dados,
+                'tipo_id': tipo_id,
+                'status': status,
+                'plataforma_origem': plataforma_origem,
+            }
         )
-    ]
+
+    return consent_data
 
 
 # Simular eventos de 50 usuários em tempo real com intervalo de 5 segundos
@@ -118,21 +110,13 @@ def generate_mock_data(root_properties: dict, num_users=20, sleep_time=120):
         tenant_id=TENANT_ID, client_id=CLIENT_ID, client_secret=CLIENT_SECRET
     )
 
-    for user_id in range(100001, 100001 + num_users):
-        user_actions = generate_user_actions_real_time(user_id)
-        for action in user_actions:
-            # Estrutura do evento
-            event_data = {
-                'user_id': action[0],
-                'action_name': action[1],
-                'action_timestamp': action[2].isoformat(),
-                'device_info': action[3],
-                'location': action[4],
-                'success': action[5],
-                'error_code': action[6],
-                'error_message': action[7],
-            }
-            # Enviar o evento para o Event Hub
-            send_event_to_eventhub(root_properties, credential, event_data)
-            # Aguardar 5 segundos antes de enviar o próximo evento
+    # Gerar ações de usuários em tempo real
+    dados_consentimentos = gerar_dados_consentimentos(num_users)
+
+    for consentimento in dados_consentimentos:
+
+        # Enviar o evento para o Event Hub
+        send_event_to_eventhub(root_properties, credential, consentimento)
+
+        # Aguardar 5 segundos antes de enviar o próximo evento
         time.sleep(sleep_time)

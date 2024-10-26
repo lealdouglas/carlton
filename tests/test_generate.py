@@ -12,7 +12,7 @@ from azure.identity import ClientSecretCredential
 from carlton.mock.generate import (
     generate_mock_data,
     generate_timestamps_real_time,
-    generate_user_actions_real_time,
+    gerar_dados_consentimentos,
     send_event_to_eventhub,
 )
 
@@ -27,7 +27,33 @@ TIPOS_ACAO = [
 DISPOSITIVOS = ['Android', 'iOS']
 
 
-@patch('carlton.mock.generate.EventHubProducerClient')
+@pytest.fixture
+def mock_credential():
+    """
+    Fixture para mockar ClientSecretCredential.
+    """
+    with patch('carlton.mock.generate.ClientSecretCredential') as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_producer_client():
+    """
+    Fixture para mockar EventHubProducerClient.
+    """
+    with patch('carlton.mock.generate.EventHubProducerClient') as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_send_event():
+    """
+    Fixture para mockar send_event_to_eventhub.
+    """
+    with patch('carlton.mock.generate.send_event_to_eventhub') as mock:
+        yield mock
+
+
 def test_send_event_to_eventhub(mock_producer_client):
     """
     Testa a função send_event_to_eventhub para verificar se os eventos são enviados corretamente.
@@ -57,38 +83,24 @@ def test_generate_timestamps_real_time():
         assert (timestamps[i] - timestamps[i - 1]).seconds == 5
 
 
-def test_generate_user_actions_real_time():
+def test_gerar_dados_consentimentos():
     """
-    Testa a função generate_user_actions_real_time para verificar se as ações do usuário são geradas corretamente.
+    Testa a função gerar_dados_consentimentos para verificar se os consentimentos são gerados corretamente.
     """
-    user_id = 100001
-    actions = generate_user_actions_real_time(user_id)
-    assert len(actions) == 10
-    for action in actions:
-        assert action[0] == user_id
-        assert action[1] in [
-            'Login',
-            'Cadastro',
-            'Consulta Saldo',
-            'Transferência',
-            'Pagamento',
-            'Consulta Extrato',
-            'Atualização Perfil',
-            'Consulta Faturas',
-            'Recarga Celular',
-            'Logout',
-        ]
-        assert isinstance(action[2], datetime)
-        assert action[3] in ['android']
-        assert action[4] in ['Belo Horizonte']
-        assert isinstance(action[5], bool)
-        assert isinstance(action[6], str)
-        assert isinstance(action[7], str)
+    num_records = 5
+    user_ids = range(10000, 10005)
+    consentimentos = gerar_dados_consentimentos(num_records, user_ids)
+    assert len(consentimentos) == num_records
+    for consentimento in consentimentos:
+        assert consentimento['user_id'] in user_ids
+        assert consentimento['status'] in ['Ativo', 'Revogado']
+        assert 'consent_id' in consentimento
+        assert 'data_inicio' in consentimento
+        assert 'data_fim' in consentimento
+        assert 'tipo_dados' in consentimento
+        assert 'plataforma_origem' in consentimento
 
 
-# @patch('carlton.mock.generate.ClientSecretCredential')
-# @patch('carlton.mock.generate.EventHubProducerClient')
-# @patch('carlton.mock.generate.send_event_to_eventhub')
 # def test_generate_mock_data(
 #     mock_send_event, mock_producer_client, mock_credential
 # ):
