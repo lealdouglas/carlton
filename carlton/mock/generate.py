@@ -11,9 +11,9 @@ from azure.identity import ClientSecretCredential
 # Função para enviar eventos para o Event Hub
 def send_event_to_eventhub(
     root_properties: dict,
+    producer: EventHubProducerClient,
     credential,
     event_data,
-    producer: EventHubProducerClient,
 ):
 
     try:
@@ -130,7 +130,7 @@ def generate_mock_data(root_properties: dict, sleep_time=120):
 
         # Enviar o evento para o Event Hub
         send_event_to_eventhub(
-            root_properties, credential, producer, consentimento
+            root_properties, producer, credential, consentimento
         )
 
         # Aguardar 5 segundos antes de enviar o próximo evento
