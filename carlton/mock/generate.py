@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from azure.eventhub import EventData, EventHubProducerClient
 from azure.identity import ClientSecretCredential
 
+from carlton.utils.logger import log_error, log_info
+
 
 # Função para enviar eventos para o Event Hub
 def send_event_to_eventhub(
