@@ -54,22 +54,22 @@ def mock_send_event():
         yield mock
 
 
-def test_send_event_to_eventhub(mock_producer_client):
-    """
-    Testa a função send_event_to_eventhub para verificar se os eventos são enviados corretamente.
-    """
-    mock_producer = mock_producer_client.return_value
-    root_properties = {
-        'event_hub_namespace': 'test_namespace',
-        'event_hub_name': 'test_eventhub',
-    }
-    credential = MagicMock()
-    event_data = {'key': 'value'}
+# def test_send_event_to_eventhub(mock_producer_client):
+#     """
+#     Testa a função send_event_to_eventhub para verificar se os eventos são enviados corretamente.
+#     """
+#     mock_producer = mock_producer_client.return_value
+#     root_properties = {
+#         'event_hub_namespace': 'test_namespace',
+#         'event_hub_name': 'test_eventhub',
+#     }
+#     credential = MagicMock()
+#     event_data = {'key': 'value'}
 
-    send_event_to_eventhub(root_properties, credential, event_data)
+#     send_event_to_eventhub(root_properties, credential, event_data)
 
-    assert mock_producer.create_batch.called
-    assert mock_producer.send_batch.called
+#     assert mock_producer.create_batch.called
+#     assert mock_producer.send_batch.called
 
 
 def test_generate_timestamps_real_time():

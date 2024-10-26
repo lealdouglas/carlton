@@ -9,14 +9,13 @@ from azure.identity import ClientSecretCredential
 
 
 # Função para enviar eventos para o Event Hub
-def send_event_to_eventhub(root_properties: dict, credential, event_data):
+def send_event_to_eventhub(
+    root_properties: dict,
+    credential,
+    event_data,
+    producer: EventHubProducerClient,
+):
 
-    # Configuração do client para enviar eventos
-    producer = EventHubProducerClient(
-        fully_qualified_namespace=f"{root_properties['event_hub_namespace'],}.servicebus.windows.net",
-        eventhub_name=root_properties['event_hub_name'],
-        credential=credential,
-    )
     try:
         # Criar um lote de eventos
         event_batch = producer.create_batch()
@@ -113,10 +112,19 @@ def generate_mock_data(root_properties: dict, num_users=20, sleep_time=120):
     # Gerar ações de usuários em tempo real
     dados_consentimentos = gerar_dados_consentimentos(num_users)
 
+    # Configuração do client para enviar eventos
+    producer = EventHubProducerClient(
+        fully_qualified_namespace=f"{root_properties['event_hub_namespace'],}.servicebus.windows.net",
+        eventhub_name=root_properties['event_hub_name'],
+        credential=credential,
+    )
+
     for consentimento in dados_consentimentos:
 
         # Enviar o evento para o Event Hub
-        send_event_to_eventhub(root_properties, credential, consentimento)
+        send_event_to_eventhub(
+            root_properties, credential, producer, consentimento
+        )
 
         # Aguardar 5 segundos antes de enviar o próximo evento
         time.sleep(sleep_time)
