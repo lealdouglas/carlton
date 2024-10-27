@@ -79,8 +79,10 @@ class DataSaver:
 
             # Cria a tabela no destino especificado
             # Create the table in the specified destination
-            # query_create_table = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} ({columns_file},_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date) LOCATION '{config_ingest['table_path']}'"""
-            query_create_table = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} ({columns_file},_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date)"""
+            if config_ingest['file_extension'] == 'avro':
+                query_create_table = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} (SequenceNumber bigint,Offset string,EnqueuedTimeUtc string, SystemProperties map<string,struct<member0:bigint,member1:double,member2:string,member3:binary>> ,Properties map<string,struct<member0:bigint,member1:double,member2:string,member3:binary>>,Body binary,_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date)"""
+            else:
+                query_create_table = f"""CREATE TABLE IF NOT EXISTS {config_ingest['schema_name']}.{config_ingest['table_name']} ({columns_file},_rescued STRING,carlton_current_date DATE,carlton_metadata struct<file_path:string,file_name:string,file_size:bigint,file_block_start:bigint,file_block_length:bigint,file_modification_time:timestamp>) USING DELTA CLUSTER BY (carlton_current_date)"""
 
             log_info(f'Registering table: {query_create_table}')
             spark.sql(query_create_table)

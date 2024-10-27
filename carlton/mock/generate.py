@@ -99,7 +99,7 @@ def gerar_dados_consentimentos():
 
 
 # Simular eventos de 50 usuários em tempo real com intervalo de 5 segundos
-def generate_mock_data(root_properties: dict, sleep_time=120):
+def generate_mock_data(root_properties: dict):
 
     # Informações do Service Principal (obtidas no Azure AD)
     TENANT_ID = os.getenv('ARM_TENANT_ID', default='ARM_TENANT_ID')
@@ -136,4 +136,4 @@ def generate_mock_data(root_properties: dict, sleep_time=120):
         )
 
         # Aguardar 5 segundos antes de enviar o próximo evento
-        time.sleep(sleep_time)
+        time.sleep(root_properties['sleep_time'])
