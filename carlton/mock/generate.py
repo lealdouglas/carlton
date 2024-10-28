@@ -128,12 +128,12 @@ def generate_mock_data(root_properties: dict):
         credential=credential,
     )
 
-    for consentimento in dados_consentimentos:
+    # for consentimento in dados_consentimentos:
 
-        # Enviar o evento para o Event Hub
-        send_event_to_eventhub(
-            root_properties, producer, credential, consentimento
-        )
+    # Enviar o evento para o Event Hub
+    send_event_to_eventhub(
+        root_properties, producer, credential, consentimento
+    )
 
-        # Aguardar 5 segundos antes de enviar o próximo evento
-        time.sleep(root_properties['sleep_time'])
+    # Aguardar 5 segundos antes de enviar o próximo evento
+    # time.sleep(root_properties['sleep_time'])

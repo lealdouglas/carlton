@@ -39,7 +39,7 @@ Atualmente, Carlton foi desenvolvido para ser utilizado em um ambiente cloud, qu
 Baixe carlton do [pypi](https://pypi.org/project/carlton/)
 
 ```bash
-pip install carlton==2.0.0
+pip install carlton==2.4.5
 ```
 
 Execute um script de ingestão com seguinte comando:
