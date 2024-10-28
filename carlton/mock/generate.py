@@ -132,7 +132,7 @@ def generate_mock_data(root_properties: dict):
 
     # Enviar o evento para o Event Hub
     send_event_to_eventhub(
-        root_properties, producer, credential, consentimento
+        root_properties, producer, credential, dados_consentimentos
     )
 
     # Aguardar 5 segundos antes de enviar o próximo evento
